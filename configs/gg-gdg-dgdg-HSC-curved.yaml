@@ -1,0 +1,28 @@
+# CAREFUL: yaml is super sensitive to spaces - don't use tabs
+
+# Parameters defining signal maps
+simparams:
+    probes: [deltag, gamma]
+    spins: [0, 2]
+    path2cls: ['../HSC/data/cls_deltagxdeltag_dist=HSC-binned-phot-z.txt', '../HSC/data/cls_gammaxdeltag_dist=HSC-binned-phot-z.txt', '../HSC/data/cls_gammaxgamma_dist=HSC-binned-phot-z.txt']
+    l0_bins: [213.0373, 291.0176, 397.5417, 543.0580, 741.8391, 1013.3821, 1384.3207, 1891.0378, 2583.2338]
+    lf_bins: [291.0176, 397.5417, 543.0580, 741.8391, 1013.3821, 1384.3207, 1891.0378, 2583.2338, 3528.8013]
+    nside: 2048
+    pixwindow: 1
+    nell_theor: 5000
+
+# Parameters defining noise maps
+# If noiseparams: null, then noise-free mocks will be generated
+noiseparams:
+    probes: ['deltag', 'gamma']
+    noisemodel: data
+    path2shearcat: '../HSC/data/shape_cat_calibrated_blinded_m_anicola_0.fits'
+    posfromshearcat: 1
+    path2deltagmask: '../HSC/data/map_gamma_HSC.fits'
+    Ngal: 2057541 # Number of galaxies in WL catalog
+
+path2masks: ['../HSC/data/mask_gamma_HSC.fits']
+
+# Parameters defining this specific run
+nrealiz: 1000
+path2outputdir: '../HSC/sims/'
