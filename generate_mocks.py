@@ -26,7 +26,7 @@ if __name__ == '__main__':
     config = yaml.load(open(args.path2config))
     logger.info('Read config from {}.'.format(args.path2config))
 
-    nrealiz = config['nrealiz']
+    nrealiz = config['simparams']['nrealiz']
 
     if config['mode'] == 'curved':
         from MockSurveyCurved_parallel import MockSurveyParallel
@@ -44,7 +44,14 @@ if __name__ == '__main__':
         raise NotImplementedError()
 
     # Here assuming for simplicity that masks are the same
-    masks = [mask, mask, mask]
+    masks = [mask, mask, mask, mask, mask, mask]
+
+    if 'l0_bins' in config['simparams']:
+        config['simparams']['l0_bins'] = np.array(config['simparams']['l0_bins'])
+    if 'l1_bins' in config['simparams']:
+        config['simparams']['l1_bins'] = np.array(config['simparams']['l1_bins'])
+    if 'spins' in config['simparams']:
+        config['simparams']['spins'] = np.array(config['simparams']['spins'])
 
     if config['noiseparams'] is not None:
         logger.info('Generating noisy mocks.')

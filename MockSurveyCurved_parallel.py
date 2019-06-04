@@ -115,7 +115,7 @@ class MockSurveyParallel(object):
 
         self.maskmat = self.init_maps()
 
-        realisations = np.arange(self.params['nrealis'])
+        realisations = np.arange(self.params['nrealiz'])
         ncpus = multiprocessing.cpu_count()
         ncpus = 4
         # ncpus = 1
@@ -202,7 +202,7 @@ class MockSurveyParallel(object):
         weights = np.zeros_like(ells, dtype='float64')
         bpws = -1*np.ones_like(ells)
         # Careful: bins start at zero
-        for i in range(9):
+        for i in range(l0_bins.shape[0]):
             bpws[l0_bins[i]:lf_bins[i]] = i
             weights[l0_bins[i]:lf_bins[i]] = 1./(lf_bins[i]-l0_bins[i])
 

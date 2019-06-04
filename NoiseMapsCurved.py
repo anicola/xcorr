@@ -149,12 +149,12 @@ class NoiseMaps(object):
             # TT, EE, BB, TE, EB, TB
             # and one needs to set at least 4 of those
             # We set the E and B mode power spectra to the theoretical shape noise power spectrum
-            zeroarr = np.zeros(self.data[probe].shape[0])
-            ps = [zeroarr, self.data[probe], self.data[probe], zeroarr]
+            zeroarr = np.zeros(data['noisecls'].shape[0])
+            ps = [zeroarr, data['noisecls'], data['noisecls'], zeroarr]
             tempmaps = list(hp.synfast(ps, self.params['nside'], new=True, pixwin=False))
             noisemap = [tempmaps[1], tempmaps[2]]
         else:
-            noisemap = hp.synfast(self.data[probe], self.params['nside'], new=True, pixwin=False)
+            noisemap = hp.synfast(data['noisecls'], self.params['nside'], new=True, pixwin=False)
 
         return noisemap
 
