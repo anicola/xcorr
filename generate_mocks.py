@@ -83,4 +83,5 @@ if __name__ == '__main__':
     for i in range(config['simparams']['nprobes']):
         for ii in range(i+1):
             path2wsp = os.path.join(config['path2outputdir'], 'wsp_probe1={}_probe2={}.dat'.format(i, ii))
-            wsps[i][ii].write_to(path2wsp)
+            wsps[i][ii].write_to(str(path2wsp))
+            logger.info('Written wsp for probe1 = {} and probe2 = {} to {}.'.format(i, ii, path2wsp))

@@ -14,7 +14,7 @@ simparams:
 
 # Parameters defining noise maps
 # If noiseparams: null, then noise-free mocks will be generated
-noiseparams: 
+noiseparams:
     probes: ['deltag', 'cmbkappa', 'gamma']
     noisemodel: theory
     path2noisecls: ['../../data/ncl_gg.txt', '../../data/ncl_kk.txt', '../../data/ncl_ss.txt']
@@ -24,3 +24,4 @@ path2mask: '../../data/mask.fits'
 # Parameters defining this specific run
 mode: curved
 path2outputdir: '../../data/'
+

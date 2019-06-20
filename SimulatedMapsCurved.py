@@ -149,9 +149,9 @@ class SimulatedMaps(object):
             logger.info('pixwindow = {}.'.format(self.params['pixwindow']))
             logger.info('Applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
             PATH2HEALPIX = os.environ['HEALPIX']
-            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(self.params['nside'])))
+            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
             pixwin = hdu[1].data['TEMPERATURE']
-            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(self.params['nside']))))
+            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
             pixwin = pixwin[:self.params['nell_theor']]
             self.pixwinarr = np.tile(pixwin, self.params['nprobes']).reshape((self.params['nprobes'], -1))
         else:

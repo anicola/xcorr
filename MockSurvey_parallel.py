@@ -122,12 +122,15 @@ class MockSurveyParallel(object):
         noisecls = np.concatenate([res[1][..., np.newaxis,:] for res in reslist], axis=2)
         tempells = reslist[0][2]
 
+        # Compute all workspaces
+        wsps = self.compute_wsps()
+
         # Remove the noise bias from the auto power spectra
         if self.params['noise']:
             logger.info('Removing noise bias.')
             cls = self.remove_noise(cls, noisecls)
 
-        return cls, noisecls, tempells
+        return cls, noisecls, tempells, wsps
 
     def remove_noise(self, cls, noisecls):
         """
@@ -339,6 +342,72 @@ class MockSurveyParallel(object):
                     noisecls[j, j, :] = cl_uncoupled
 
         return cls, noisecls, ells_uncoupled
+
+    def compute_wsps(self):
+        """
+        Convenience method for calculating the NaMaster workspaces for all the probes in the simulation.
+        :return wsps: wsps list
+        """
+
+        wsps = [[None for i in range(self.params['nprobes'])] for ii in range(self.params['nprobes'])]
+
+        maps = self.simmaps.generate_maps()
+
+        b = nmt.NmtBinFlat(self.params['l0_bins'], self.params['lf_bins'])
+
+        # Compute workspaces for all the probes
+        for j in range(self.params['nprobes']):
+            for jj in range(j+1):
+                spin1 = self.params['spins'][j]
+                spin2 = self.params['spins'][jj]
+
+                logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
+                if spin1 == 2 and spin2 == 0:
+                    # Define flat sky spin-2 field
+                    emaps = [maps[j], maps[j+self.params['nspin2']]]
+                    f2_1 = nmt.NmtFieldFlat(self.params['Lx'], self.params['Ly'], self.maskmat[j, jj], emaps, purify_b=False)
+                    # Define flat sky spin-0 field
+                    emaps = [maps[jj]]
+                    f0_1 = nmt.NmtFieldFlat(self.params['Lx'], self.params['Ly'], self.maskmat[j, jj], emaps, purify_b=False)
+
+                    logger.info('Computing workspace element.')
+                    wsp = nmt.NmtWorkspaceFlat()
+                    wsp.compute_coupling_matrix(f2_1, f0_1, b)
+                    wsps[j][jj] = wsp
+                    if j != jj:
+                       wsps[jj][j] = wsp
+
+                elif spin1 == 2 and spin2 == 2:
+                    # Define flat sky spin-2 field
+                    emaps = [maps[j], maps[j+self.params['nspin2']]]
+                    f2_1 = nmt.NmtFieldFlat(self.params['Lx'], self.params['Ly'], self.maskmat[j, jj], emaps, purify_b=False)
+                    # Define flat sky spin-0 field
+                    emaps = [maps[jj], maps[jj+self.params['nspin2']]]
+                    f2_2 = nmt.NmtFieldFlat(self.params['Lx'], self.params['Ly'], self.maskmat[j, jj], emaps, purify_b=False)
+
+                    logger.info('Computing workspace element.')
+                    wsp = nmt.NmtWorkspaceFlat()
+                    wsp.compute_coupling_matrix(f2_1, f2_2, b)
+                    wsps[j][jj] = wsp
+                    if j != jj:
+                       wsps[jj][j] = wsp
+
+                else:
+                    # Define flat sky spin-0 field
+                    emaps = [maps[j]]
+                    f0_1 = nmt.NmtFieldFlat(self.params['Lx'], self.params['Ly'], self.maskmat[j, jj], emaps, purify_b=False)
+                    # Define flat sky spin-0 field
+                    emaps = [maps[jj]]
+                    f0_2 = nmt.NmtFieldFlat(self.params['Lx'], self.params['Ly'], self.maskmat[j, jj], emaps, purify_b=False)
+
+                    logger.info('Computing workspace element.')
+                    wsp = nmt.NmtWorkspaceFlat()
+                    wsp.compute_coupling_matrix(f0_1, f0_2, b)
+                    wsps[j][jj] = wsp
+                    if j != jj:
+                       wsps[jj][j] = wsp
+
+        return wsps
 
     def init_maps(self):
         """

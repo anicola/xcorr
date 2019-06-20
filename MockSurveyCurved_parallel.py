@@ -79,9 +79,9 @@ class MockSurveyParallel(object):
         if self.params['pixwindow'] == 1:
             logger.info('Applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
             PATH2HEALPIX = os.environ['HEALPIX']
-            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(self.params['nside'])))
+            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
             pixwin = hdu[1].data['TEMPERATURE']
-            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(self.params['nside']))))
+            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
             self.pixwin = pixwin[:3*self.params['nside']]
 
         else:
@@ -138,7 +138,8 @@ class MockSurveyParallel(object):
         noisecls = np.concatenate([res[1][..., np.newaxis,:] for res in reslist], axis=2)
         tempells = reslist[0][2]
 
-        wsps = self.make_wsps()
+        # Compute all workspaces
+        wsps = self.compute_wsps()
 
         # Remove the noise bias from the auto power spectra
         if self.params['noise']:
@@ -369,26 +370,10 @@ class MockSurveyParallel(object):
 
         return cls, noisecls, ells_uncoupled
 
-    def make_wsps(self):
+    def compute_wsps(self):
         """
-        Convenience method for calculating the signal and noise cls for
-        a given mock realization. This is a function that can be pickled and can be thus
-        used when running the mock generation in parallel using multiprocessing pool.
-        :param realis: number of the realisation to run
-        :param noise: boolean flag indicating if noise is added to the mocks
-        noise=True: add noise to the mocks
-        noise=False: do not add noise to the mocks
-        :param probes: list of desired probes to run the mock for
-        :param maskmat: matrix with the relevant masks for the probes
-        :param clparams: list of dictionaries with the parameters for calculating the
-        power spectra for each probe
-        :return cls: 3D array of signal and noise cls for the given realisation,
-        0. and 1. axis denote the power spectrum, 2. axis gives the cls belonging
-        to this configuration
-        :return noisecls: 3D array of noise cls for the given realisation,
-        0. and 1. axis denote the power spectrum, 2. axis gives the cls belonging
-        to this configuration
-        :return tempells: array of the ell range of the power spectra
+        Convenience method for calculating the NaMaster workspaces for all the probes in the simulation.
+        :return wsps: wsps list
         """
 
         wsps = [[None for i in range(self.params['nprobes'])] for ii in range(self.params['nprobes'])]
