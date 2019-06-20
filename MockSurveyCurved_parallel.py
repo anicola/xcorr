@@ -138,12 +138,14 @@ class MockSurveyParallel(object):
         noisecls = np.concatenate([res[1][..., np.newaxis,:] for res in reslist], axis=2)
         tempells = reslist[0][2]
 
+        wsps = self.make_wsps()
+
         # Remove the noise bias from the auto power spectra
         if self.params['noise']:
             logger.info('Removing noise bias.')
             cls = self.remove_noise(cls, noisecls)
 
-        return cls, noisecls, tempells
+        return cls, noisecls, tempells, wsps
 
     def remove_noise(self, cls, noisecls):
         """
@@ -366,6 +368,100 @@ class MockSurveyParallel(object):
                     noisecls[j, j, :] = cl_uncoupled
 
         return cls, noisecls, ells_uncoupled
+
+    def make_wsps(self):
+        """
+        Convenience method for calculating the signal and noise cls for
+        a given mock realization. This is a function that can be pickled and can be thus
+        used when running the mock generation in parallel using multiprocessing pool.
+        :param realis: number of the realisation to run
+        :param noise: boolean flag indicating if noise is added to the mocks
+        noise=True: add noise to the mocks
+        noise=False: do not add noise to the mocks
+        :param probes: list of desired probes to run the mock for
+        :param maskmat: matrix with the relevant masks for the probes
+        :param clparams: list of dictionaries with the parameters for calculating the
+        power spectra for each probe
+        :return cls: 3D array of signal and noise cls for the given realisation,
+        0. and 1. axis denote the power spectrum, 2. axis gives the cls belonging
+        to this configuration
+        :return noisecls: 3D array of noise cls for the given realisation,
+        0. and 1. axis denote the power spectrum, 2. axis gives the cls belonging
+        to this configuration
+        :return tempells: array of the ell range of the power spectra
+        """
+
+        wsps = [[None for i in range(self.params['nprobes'])] for ii in range(self.params['nprobes'])]
+
+        maps = self.simmaps.generate_maps()
+
+        l0_bins = np.around(self.params['l0_bins']).astype('int')
+        lf_bins = np.around(self.params['lf_bins']).astype('int')
+
+        ells = np.arange(np.amax(lf_bins))
+        weights = np.zeros_like(ells, dtype='float64')
+        bpws = -1*np.ones_like(ells)
+        # Careful: bins start at zero
+        for i in range(l0_bins.shape[0]):
+            bpws[l0_bins[i]:lf_bins[i]] = i
+            weights[l0_bins[i]:lf_bins[i]] = 1./(lf_bins[i]-l0_bins[i])
+
+        b = nmt.NmtBin(self.params['nside'], bpws=bpws, ells=ells, weights=np.ones_like(ells))
+
+        # Compute workspaces for all the probes
+        for j in range(self.params['nprobes']):
+            for jj in range(j+1):
+                spin1 = self.params['spins'][j]
+                spin2 = self.params['spins'][jj]
+
+                logger.info('Computing workspace element for j, jj = {}, {}.'.format(j, jj))
+                logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
+                if spin1 == 2 and spin2 == 0:
+                    # Define curved sky spin-2 field
+                    emaps = [maps[j], maps[j+self.params['nspin2']]]
+                    f2_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
+                    # Define curved sky spin-0 field
+                    emaps = [maps[jj]]
+                    f0_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
+
+                    logger.info('Computing workspace element.')
+                    wsp = nmt.NmtWorkspace()
+                    wsp.compute_coupling_matrix(f2_1, f0_1, b)
+                    wsps[j][jj] = wsp
+                    if j != jj:
+                        wsps[jj][j] = wsp
+
+                elif spin1 == 2 and spin2 == 2:
+                    # Define flat sky spin-2 field
+                    emaps = [maps[j], maps[j+self.params['nspin2']]]
+                    f2_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
+                    # Define flat sky spin-0 field
+                    emaps = [maps[jj], maps[jj+self.params['nspin2']]]
+                    f2_2 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
+
+                    logger.info('Computing workspace element.')
+                    wsp = nmt.NmtWorkspace()
+                    wsp.compute_coupling_matrix(f2_1, f2_2, b)
+                    wsps[j][jj] = wsp
+                    if j != jj:
+                       wsps[jj][j] = wsp
+
+                else:
+                    # Define flat sky spin-0 field
+                    emaps = [maps[j]]
+                    f0_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
+                    # Define flat sky spin-0 field
+                    emaps = [maps[jj]]
+                    f0_2 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
+
+                    logger.info('Computing workspace element.')
+                    wsp = nmt.NmtWorkspace()
+                    wsp.compute_coupling_matrix(f0_1, f0_2, b)
+                    wsps[j][jj] = wsp
+                    if j != jj:
+                       wsps[jj][j] = wsp
+
+        return wsps
 
     def init_maps(self):
         """
