@@ -365,12 +365,6 @@ class MockSurveyParallel(object):
                     cl_uncoupled = self.wsps[j][j].decouple_cell(cl_coupled)
                     noisecls[j, j, :] = cl_uncoupled
 
-        if realis == 0:
-            for j in range(self.params['nprobes']):
-                for jj in range(j+1):
-                    path2wsp = os.path.join(self.params['path2wsps'], 'wsp_probe1={}_probe2={}.dat'.format(j, jj))
-                    self.wsps[j][jj].write_to(path2wsp)
-
         return cls, noisecls, ells_uncoupled
 
     def init_maps(self):

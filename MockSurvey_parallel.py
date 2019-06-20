@@ -121,14 +121,13 @@ class MockSurveyParallel(object):
         cls = np.concatenate([res[0][..., np.newaxis,:] for res in reslist], axis=2)
         noisecls = np.concatenate([res[1][..., np.newaxis,:] for res in reslist], axis=2)
         tempells = reslist[0][2]
-        wsps = reslist[0][3]
 
         # Remove the noise bias from the auto power spectra
         if self.params['noise']:
             logger.info('Removing noise bias.')
             cls = self.remove_noise(cls, noisecls)
 
-        return cls, noisecls, tempells, wsps
+        return cls, noisecls, tempells
 
     def remove_noise(self, cls, noisecls):
         """
@@ -339,7 +338,7 @@ class MockSurveyParallel(object):
                     cl_uncoupled = self.wsps[j][j].decouple_cell(cl_coupled)
                     noisecls[j, j, :] = cl_uncoupled
 
-        return cls, noisecls, ells_uncoupled, self.wsps
+        return cls, noisecls, ells_uncoupled
 
     def init_maps(self):
         """
