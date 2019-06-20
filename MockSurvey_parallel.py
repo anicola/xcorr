@@ -127,7 +127,7 @@ class MockSurveyParallel(object):
             logger.info('Removing noise bias.')
             cls = self.remove_noise(cls, noisecls)
 
-        return cls, noisecls, tempells
+        return cls, noisecls, tempells, self.wsps
 
     def remove_noise(self, cls, noisecls):
         """
