@@ -60,7 +60,7 @@ if __name__ == '__main__':
         logger.info('Generating noise-free mocks.')
         mocksurvey = MockSurveyParallel(masks, config['simparams'], noiseparams={})
 
-    cls, noisecls, ells, wsps = mocksurvey.reconstruct_cls_parallel()
+    cls, noisecls, ells = mocksurvey.reconstruct_cls_parallel()
 
     if not os.path.isdir(config['path2outputdir']):
         try:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     np.save(path2ellarr, ells)
     logger.info('Written ells to {}.'.format(path2ellarr))
 
-    for i in range(config['simparams']['nprobes']):
-        for ii in range(i+1):
-            path2wsp = os.path.join(config['path2outputdir'], 'wsp_probe1={}_probe2={}.dat'.format(i, ii))
-            wsps[i][ii].write_to(path2wsp)
+    # for i in range(config['simparams']['nprobes']):
+    #     for ii in range(i+1):
+    #         path2wsp = os.path.join(config['path2outputdir'], 'wsp_probe1={}_probe2={}.dat'.format(i, ii))
+    #         wsps[i][ii].write_to(path2wsp)
