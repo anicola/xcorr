@@ -10,7 +10,9 @@ Requirements:
 How to run the Gaussian simulation code:
 
 * From the xcorr directory, run: `python generate_mocks.py --path2config path/to/your/favorite/config.yaml`
+* Config file example: `configs/gg-gdg-dgdg-LSSTxSO-curved.yaml`
 
 How to compute Cls:
 
 * From the xcorr directory, run: `python compute_cls.py --path2config path/to/your/favorite/config.yaml`
+* Config file example: `configs/cls-dgdg-curved.yaml`
