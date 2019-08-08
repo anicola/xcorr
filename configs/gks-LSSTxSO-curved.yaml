@@ -23,8 +23,7 @@ noiseparams:
     path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt', 
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/data/ncl_ss.txt']
 
-#!!! for now, using the full SO mask
-path2mask: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_so_40pc.fits'
+path2mask: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
 
 # Parameters defining this specific run
 mode: curved
