@@ -12,7 +12,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DEFAULTPATH2HEALPIXWINDOW = '/Users/Andrina/ETH_Codes/Healpix_3.20/data'
+#DEFAULTPATH2HEALPIXWINDOW = '/Users/Andrina/ETH_Codes/Healpix_3.20/data'
 
 class SimulatedMaps(object):
     """
@@ -157,11 +157,12 @@ class SimulatedMaps(object):
                 logger.info('Read {}.'.format(path2pixwindow))
             else:
                 logger.info('path2pixwindow not provided. Reading HEALPix pixel window function.')
-                path2pixwindow = os.path.join(DEFAULTPATH2HEALPIXWINDOW, 'pixel_window_n{}.fits'.\
+#                path2pixwindow = os.path.join(DEFAULTPATH2HEALPIXWINDOW, 'pixel_window_n{}.fits'.\
                                                   format(self.params['nside']))
-                hdulist = fits.open(path2pixwindow)
-                pixwindow = hdulist[1].data['TEMPERATURE']
-                logger.info('Read {}.'.format(path2pixwindow))
+#                hdulist = fits.open(path2pixwindow)
+#                pixwindow = hdulist[1].data['TEMPERATURE']
+#                logger.info('Read {}.'.format(path2pixwindow))
+                self.pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False)
             self.pixwindow = pixwindow[:self.params['nell']]
         else:
             logger.info('Pixel window function not supplied.')

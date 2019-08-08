@@ -76,13 +76,19 @@ class MockSurveyParallel(object):
             logger.info('Setting up workspace attribute.')
             self.wsps = [[None for i in range(self.params['nprobes'])] for ii in range(self.params['nprobes'])]
 
+#        if self.params['pixwindow'] == 1:
+#            logger.info('Applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
+#            PATH2HEALPIX = os.environ['HEALPIX']
+#            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
+#            pixwin = hdu[1].data['TEMPERATURE']
+#            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
+#            self.pixwin = pixwin[:3*self.params['nside']]
+
         if self.params['pixwindow'] == 1:
             logger.info('Applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
-            PATH2HEALPIX = os.environ['HEALPIX']
-            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
-            pixwin = hdu[1].data['TEMPERATURE']
-            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
-            self.pixwin = pixwin[:3*self.params['nside']]
+            self.pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False) 
+
+
 
         else:
             logger.info('Not applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
