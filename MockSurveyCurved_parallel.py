@@ -86,7 +86,8 @@ class MockSurveyParallel(object):
 
         if self.params['pixwindow'] == 1:
             logger.info('Applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
-            self.pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False) 
+            pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False) 
+            self.pixwin = pixwin[:3*self.params['nside']]
 
 
 
