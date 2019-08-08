@@ -12,7 +12,8 @@ Scripts for computing cross-correlations for SO
 ### Installation on cori
 
 #### Modules loaded in my .bashrc.ext (not sure if they are all needed):
-```module load cray-fftw/3.3.8.2
+```
+module load cray-fftw/3.3.8.2
 module load python/2.7-anaconda-2019.07
 module load intel
 module load openmpi
@@ -20,7 +21,8 @@ module load openmpi
 
 #### Installing namaster and pymaster:
 Install NaMaster with conda:
-```conda install -c conda-forge namaster
+```
+conda install -c conda-forge namaster
 conda install -c conda-forge cfitsio=3.430
 ```
 
@@ -32,13 +34,17 @@ Install pymaster with pip:
 Download the repo from [https://github.com/simonsobs/pixell](https://github.com/simonsobs/pixell),
 unzip it,
 cd to its root folder,then:
-`python setup.py build_ext -i`
-Add line to my .bashrc.ext
-`export PYTHONPATH=$PYTHONPATH:/global/homes/e/eschaan/local/pixell-master`
-
+```
+python setup.py build_ext -i
+```
+Add the following line to your .bashrc.ext
+```
+export PYTHONPATH=$PYTHONPATH:/global/homes/e/eschaan/local/pixell-master
+```
 
 #### Installing other needed packages:
-```conda install pyyaml
+```
+conda install pyyaml
 conda install astropy
 conda install -c conda-forge healpy
 ```
