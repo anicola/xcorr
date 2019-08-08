@@ -9,7 +9,7 @@ Scripts for computing cross-correlations for SO
 * `pyyaml`: [https://pyyaml.org/wiki/PyYAMLDocumentation](https://pyyaml.org/wiki/PyYAMLDocumentation)(to read input files)
 * `astropy`: [https://github.com/astropy/astropy](https://github.com/astropy/astropy)
 
-### Installation on cori
+## Installation on cori
 
 #### Modules loaded in my .bashrc.ext (not sure if they are all needed):
 ```
