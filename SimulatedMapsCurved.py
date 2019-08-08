@@ -153,7 +153,7 @@ class SimulatedMaps(object):
 #            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
 #            pixwin = hdu[1].data['TEMPERATURE']
 #            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
-            pixwin = self.pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False)
+            pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False)
             pixwin = pixwin[:self.params['nell_theor']]
             self.pixwinarr = np.tile(pixwin, self.params['nprobes']).reshape((self.params['nprobes'], -1))
         else:
