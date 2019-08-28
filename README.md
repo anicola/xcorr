@@ -39,7 +39,7 @@ python setup.py build_ext -i
 ```
 Add the following line to your .bashrc.ext
 ```
-export PYTHONPATH=$PYTHONPATH:/global/homes/e/eschaan/local/pixell-master
+export PYTHONPATH=$PYTHONPATH:/path/to/your/copy/of/pixell-master
 ```
 
 #### Installing other needed packages:
