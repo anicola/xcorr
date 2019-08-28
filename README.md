@@ -6,7 +6,7 @@ Scripts for computing cross-correlations for SO
 * `NaMaster` and `pymaster`: [https://namaster.readthedocs.io/en/latest/pymaster.html](https://namaster.readthedocs.io/en/latest/pymaster.html)
 * `pixell`: [https://github.com/simonsobs/pixell](https://github.com/simonsobs/pixell) (for flat sky computations)
 * `healpy`: [https://healpy.readthedocs.io/en/latest](https://healpy.readthedocs.io/en/latest) (for curved sky computations)
-* `pyyaml`: [https://pyyaml.org/wiki/PyYAMLDocumentation](https://pyyaml.org/wiki/PyYAMLDocumentation)(to read input files)
+* `pyyaml`: [https://pyyaml.org/wiki/PyYAMLDocumentation](https://pyyaml.org/wiki/PyYAMLDocumentation) (to read input files)
 * `astropy`: [https://github.com/astropy/astropy](https://github.com/astropy/astropy)
 
 ## Installation on cori
