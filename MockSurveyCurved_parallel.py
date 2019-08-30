@@ -125,7 +125,8 @@ class MockSurveyParallel(object):
         pool = multiprocessing.Pool(processes = ncpus)
 
         # Pool map preserves the call order!
-        reslist = pool.map(self, realisations)
+        reslist = pool.map(self, realisations)       
+#        reslist = map(self, realisations)
 
         pool.close() # no more tasks
         pool.join()  # wrap up current tasks

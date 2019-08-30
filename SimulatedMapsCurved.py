@@ -59,6 +59,15 @@ class SimulatedMaps(object):
         logger.info('Generating Gaussian map realizations.')
         np.random.seed(seed=None)
         # Now create the maps with the correlations between both spin-0 and spin-2 fields
+
+
+        print("tests")
+        print("nside", self.params['nside'])
+        print("cl shape", self.cls.shape)
+        print("spins", self.params['spins'])
+        print("pixwinarr shape", self.pixwinarr.shape)
+
+
         maps = nmt.synfast_spherical(self.params['nside'], self.cls, spin_arr=self.params['spins'], seed=-1, \
                                      beam=self.pixwinarr)
         logger.info('Gaussian maps done.')
@@ -153,9 +162,9 @@ class SimulatedMaps(object):
 #            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
 #            pixwin = hdu[1].data['TEMPERATURE']
 #            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
-            pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False)
-            pixwin = pixwin[:self.params['nell_theor']]
+            pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False, lmax=self.params['nell_theor']-1)
             self.pixwinarr = np.tile(pixwin, self.params['nprobes']).reshape((self.params['nprobes'], -1))
+
         else:
             logger.info('Pixel window function not supplied.')
             self.pixwinarr = None
