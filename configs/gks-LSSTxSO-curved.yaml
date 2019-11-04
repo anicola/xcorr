@@ -2,7 +2,7 @@
 
 # Parameters defining signal maps
 simparams:
-    nrealiz: 100
+    nrealiz: 96
     probes: ['deltag', 'cmbkappa', 'gamma']
     spins: [0, 0, 2]
     path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
@@ -23,7 +23,13 @@ noiseparams:
     path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt', 
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_ss.txt']
 
+# footprint mask only
 path2mask: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
+# point source mask only
+#path2mask: '/global/cscratch1/sd/sferraro/SOxpipe/masks/SO_LSS_ptsources.fits'
+# footprint + point sources mask
+#path2mask: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_footLSSTSO40pc_ps_nside1024.fits'
+
 
 # Parameters defining this specific run
 mode: curved

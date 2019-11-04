@@ -120,11 +120,15 @@ class MockSurveyParallel(object):
         realisations = np.arange(self.params['nrealiz'])
         ncpus = multiprocessing.cpu_count()
         # ncpus = 1
+        # Limit the number of processes, to avoid running out of memory
+        ncpus = min(ncpus, 32)
         logger.info('Number of available CPUs {}.'.format(ncpus))
         pool = multiprocessing.Pool(processes = ncpus)
 
         # Pool map preserves the call order!
+        logger.info('####### Starting to gen maps and their cls #######')
         reslist = pool.map(self, realisations)       
+        logger.info('####### Starting to gen maps and their cls #######')
 #        reslist = map(self, realisations)
 
         pool.close() # no more tasks
