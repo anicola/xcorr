@@ -119,7 +119,6 @@ class MockSurveyParallel(object):
 
         realisations = np.arange(self.params['nrealiz'])
         ncpus = multiprocessing.cpu_count()
-        ncpus = 4
         # ncpus = 1
         logger.info('Number of available CPUs {}.'.format(ncpus))
         pool = multiprocessing.Pool(processes = ncpus)

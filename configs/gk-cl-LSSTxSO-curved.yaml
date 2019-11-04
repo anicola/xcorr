@@ -1,14 +1,22 @@
 # CAREFUL: yaml is super sensitive to spaces - don't use tabs
 
+mode: curved
+spins: [0, 0]
+path2map1: 
+
+
+
+
+
+
+
 # Parameters defining signal maps
 simparams:
-    nrealiz: 100
-    probes: ['deltag', 'cmbkappa', 'gamma']
-    spins: [0, 0, 2]
+    nrealiz: 1
+    probes: ['deltag', 'cmbkappa']
+    spins: [0, 0]
     path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gs.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_ks.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_ss.txt']
+'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
     l0_bins: [213.0373, 291.0176, 397.5417, 543.0580, 741.8391, 1013.3821, 1384.3207, 1891.0378]
     lf_bins: [291.0176, 397.5417, 543.0580, 741.8391, 1013.3821, 1384.3207, 1891.0378, 2583.2338]
     nside: 1024
@@ -18,14 +26,12 @@ simparams:
 # Parameters defining noise maps
 # If noiseparams: null, then noise-free mocks will be generated
 noiseparams:
-    probes: ['deltag', 'cmbkappa', 'gamma']
+    probes: ['deltag', 'cmbkappa']
     noisemodel: theory
-    path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_ss.txt']
+    path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'] 
 
 path2mask: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
 
 # Parameters defining this specific run
-mode: curved
 path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf'
 
