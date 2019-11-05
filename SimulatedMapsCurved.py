@@ -56,7 +56,7 @@ class SimulatedMaps(object):
         :return:
         """
 
-        logger.info('Generating Gaussian map realizations.')
+        logger.info('Generating Gaussian maps for one realization')
         np.random.seed(seed=None)
         # Now create the maps with the correlations between both spin-0 and spin-2 fields
 
@@ -70,7 +70,7 @@ class SimulatedMaps(object):
 
         maps = nmt.synfast_spherical(self.params['nside'], self.cls, spin_arr=self.params['spins'], seed=-1, \
                                      beam=self.pixwinarr)
-        logger.info('Gaussian maps done.')
+        logger.info('Gaussian maps done for one realization')
 
         if self.params['nspin2'] > 0:
             logger.info('Spin 2 fields present. Reordering maps.')
