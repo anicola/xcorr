@@ -42,7 +42,7 @@ class MockSurveyParallel(object):
         # to avoid each process recomputing them
         tStart = time.time()
         self.generateWorkspaces() 
-        tStop = time()
+        tStop = time.time()
         logger.info('workspaces took '+str((tStop-tStart)/60.)+' min')
 
         self.simmaps = SimulatedMaps(simparams)
@@ -294,7 +294,7 @@ class MockSurveyParallel(object):
         # Manu: use sharedmem for multiprocessing here,
         # by forking rather than pickling
         with sharedmem.MapReduce(np=ncpus) as pool:
-            result = pool.map(self, realisations)
+            reslist = pool.map(self, realisations)
 
 
         pool.close() # no more tasks
@@ -393,7 +393,7 @@ class MockSurveyParallel(object):
                 spin1 = self.params['spins'][j]
                 spin2 = self.params['spins'][jj]
 
-                logger.info('Realization '+str(realiz)+':')
+                logger.info('Realization '+str(realis)+':')
                 logger.info('Computing the power spectrum between probe1 = {} and probe2 = {}.'.format(probe1, probe2))
                 logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
                 if spin1 == 2 and spin2 == 0:
