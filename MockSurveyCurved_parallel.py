@@ -38,7 +38,7 @@ class MockSurveyParallel(object):
         self.masks = masks
         self.maskmat = self.init_maps()
 
-        # Manu: generate workspaces before the parallel part,
+        # Generate workspaces before the parallel part,
         # to avoid each process recomputing them
         tStart = time.time()
         self.generateWorkspaces() 
@@ -89,11 +89,6 @@ class MockSurveyParallel(object):
 
         if self.params['pixwindow'] == 1:
             logger.info('Applying pixel window function correction for NSIDE = {}.'.format(self.params['nside']))
-#            PATH2HEALPIX = os.environ['HEALPIX']
-#            hdu = fits.open(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4))))
-#            pixwin = hdu[1].data['TEMPERATURE']
-#            logger.info('Read {}.'.format(os.path.join(PATH2HEALPIX, 'data/pixel_window_n{}.fits'.format(str(self.params['nside']).zfill(4)))))
-#            self.pixwin = pixwin[:3*self.params['nside']]
             self.pixwin = hp.sphtfunc.pixwin(self.params['nside'], pol=False, lmax=3*self.params['nside'])  
 
 
@@ -115,21 +110,41 @@ class MockSurveyParallel(object):
         return noiseparams
  
 
+    def init_maps(self):
+        """
+        Initialises an array of masks from the input mask array using the specifications
+        in params.
+        :param :
+        :return maskmat: 3D array with 0. and 1. axis denoting the number of the map to cross correlate
+        (i.e. the power spectrum) and the 3. axis is the mask belonging to this index
+        This is different for separate masks for the cross correlation or combined masks for the cross correlation
+        """
 
+        maskmat = np.zeros((self.params['nprobes'], self.params['nprobes'], self.params['nhppix']))
+        k = 0
+        # 1st case: We give a combined mask to the cross power spectrum
+        if len(self.masks) > self.params['nprobes']:
+            logger.info('Number of provided masks larger than number of probes.')
+            logger.info('Setting the mask for the cross power spectrum to the provided combined mask.')
+            for i in range(self.params['nprobes']):
+                tempmask = self.masks[i]
+                maskmat[i, i, :] = tempmask
+                k += 1
+            for i in range(self.params['nprobes']):
+                for ii in range(self.params['nprobes']):
+                    if i < ii:
+                        tempmask = self.masks[k]
+                        maskmat[i, ii, :] = tempmask
+                        maskmat[ii, i, :] = tempmask
+                        k += 1
+        elif self.params['nprobes'] == 1 and len(self.masks) == 1:
+            for i in range(self.params['nprobes']):
+                tempmask = self.masks[i]
+                maskmat[i, i, :] = tempmask
+        else:
+            raise NotImplementedError('No other masking option implemented yet. Aborting.')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return maskmat
 
 
     def generateWorkspaces(self):
@@ -155,8 +170,6 @@ class MockSurveyParallel(object):
             weights[l0_bins[i]:lf_bins[i]] = 1./(lf_bins[i]-l0_bins[i])
 
         b = nmt.NmtBin(self.params['nside'], bpws=bpws, ells=ells, weights=np.ones_like(ells))
-#        # The effective sampling rate for these bandpowers can be obtained calling:
-#        ells_uncoupled = b.get_effective_ells()
 
         # Loop over all pairs of probes,
         # to generate the necessary workspaces
@@ -232,25 +245,6 @@ class MockSurveyParallel(object):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def reconstruct_cls_parallel(self):
         """
         Calculates the power spectra for different surveys from Gaussian
@@ -263,46 +257,25 @@ class MockSurveyParallel(object):
         :return tempells: array of ell values which is equal for all the probes
         """
 
-        #self.maskmat = self.init_maps()
-
-
-        # Compute all workspaces
-        # Manu: I commented this out: I think it is done several times,
-        # for instance inside __call__
-        # and I moved it up
-        # and in my new function self.generateWorkspaces
-        #wsps = self.compute_wsps()
-
-
         realisations = np.arange(self.params['nrealiz'])
         ncpus = multiprocessing.cpu_count()
 
-#        # ncpus = 1
-#        # Limit the number of processes, to avoid running out of memory
-#        ncpus = min(ncpus, 32)
-#        logger.info('Number of available CPUs {}.'.format(ncpus))
-#        pool = multiprocessing.Pool(processes = ncpus)
-#
-#        # Pool map preserves the call order!
-#        logger.info('Starting the parallel generation of mocks and their spectra')
-#        reslist = pool.map(self, realisations)       
-
-#        # serial version
-#        logger.info('####### Starting to gen maps and their cls #######')
-#        reslist = map(self, realisations)
+        # ncpus = 1
+        # Limit the number of processes, to avoid running out of memory
+        ncpus = min(ncpus, 32)
+        logger.info('Number of available CPUs {}.'.format(ncpus))
 
         # Manu: use sharedmem for multiprocessing here,
         # by forking rather than pickling
+        tStart = time.time()
         with sharedmem.MapReduce(np=ncpus) as pool:
             reslist = pool.map(self, realisations)
+#        reslist = map(self, realisations)
+        tStop = time.time()
 
 
-        pool.close() # no more tasks
-        pool.join()  # wrap up current tasks
-
-        # cls, noisecls, tempells = self(realisations)
-
-        logger.info('Cls calculation done.')
+        logger.info('Done generating all maps and spectra.')
+        logger.info('Took '+str((tStop-tStart)/60.)+' min')
 
         # Concatenate the cl lists into 4D arrays. The arrays are expanded and concatenated along the
         # 2nd axis
@@ -315,9 +288,10 @@ class MockSurveyParallel(object):
             logger.info('Removing noise bias.')
             cls = self.remove_noise(cls, noisecls)
 
-        # Manu: I replaced wsps with self.wsps
+        # Replaced wsps with self.wsps
         #return cls, noisecls, tempells, wsps
         return cls, noisecls, tempells, self.wsps
+
 
     def remove_noise(self, cls, noisecls):
         """
@@ -332,6 +306,7 @@ class MockSurveyParallel(object):
             cls[i, i, :, :] -= np.mean(noisecls[i,i,:,:], axis=0)
 
         return cls
+
 
     def __call__(self, realis):
         """
@@ -355,7 +330,7 @@ class MockSurveyParallel(object):
         :return tempells: array of the ell range of the power spectra
         """
 
-        logger.info('Running realisation : {}.'.format(realis))
+        logger.info('Running realisation: {}.'.format(realis))
 
         cls = np.zeros((self.params['nautocls'], self.params['nautocls'], self.params['nell']))
         noisecls = np.zeros_like(cls)
@@ -393,9 +368,10 @@ class MockSurveyParallel(object):
                 spin1 = self.params['spins'][j]
                 spin2 = self.params['spins'][jj]
 
-                logger.info('Realization '+str(realis)+':')
-                logger.info('Computing the power spectrum between probe1 = {} and probe2 = {}.'.format(probe1, probe2))
-                logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
+                logger.info('Computing Cl_'+probe1+'_'+probe2+', rea '+str(realis)+', spins ='+str(spin1)+'-'+str(spin2))
+#                logger.info('Realization '+str(realis)+':')
+#                logger.info('Computing the power spectrum between probe1 = {} and probe2 = {}.'.format(probe1, probe2))
+#                logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
                 if spin1 == 2 and spin2 == 0:
                     # Define curved sky spin-2 field
                     emaps = [maps[j], maps[j+self.params['nspin2']]]
@@ -403,18 +379,6 @@ class MockSurveyParallel(object):
                     # Define curved sky spin-0 field
                     emaps = [maps[jj]]
                     f0_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
-
-#                    if self.wsps[j][jj] is None:
-#                        logger.info('Workspace element for j, jj = {}, {} not set.'.format(j, jj))
-#                        logger.info('Computing workspace element.')
-#                        wsp = nmt.NmtWorkspace()
-#                        wsp.compute_coupling_matrix(f2_1, f0_1, b)
-#                        self.wsps[j][jj] = wsp
-#                        if j != jj:
-#                           self.wsps[jj][j] = wsp
-#                        logger.info('Done computing workspace element.')
-#                    else:
-#                        logger.info('Workspace element already set for j, jj = {}, {}.'.format(j, jj))
 
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f2_1, f0_1)
@@ -436,18 +400,6 @@ class MockSurveyParallel(object):
                     emaps = [maps[jj], maps[jj+self.params['nspin2']]]
                     f2_2 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
 
-#                    if self.wsps[j][jj] is None:
-#                        logger.info('Workspace element for j, jj = {}, {} not set.'.format(j, jj))
-#                        logger.info('Computing workspace element.')
-#                        wsp = nmt.NmtWorkspace()
-#                        wsp.compute_coupling_matrix(f2_1, f2_2, b)
-#                        self.wsps[j][jj] = wsp
-#                        if j != jj:
-#                           self.wsps[jj][j] = wsp
-#                        logger.info('Done computing workspace element.')
-#                    else:
-#                        logger.info('Workspace element already set for j, jj = {}, {}.'.format(j, jj))
-#
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f2_1, f2_2)
                     # Uncoupling pseudo-Cls
@@ -470,18 +422,6 @@ class MockSurveyParallel(object):
                     emaps = [maps[jj]]
                     f0_2 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
 
-#                    if self.wsps[j][jj] is None:
-#                        logger.info('Workspace element for j, jj = {}, {} not set.'.format(j, jj))
-#                        logger.info('Computing workspace element.')
-#                        wsp = nmt.NmtWorkspace()
-#                        wsp.compute_coupling_matrix(f0_1, f0_2, b)
-#                        self.wsps[j][jj] = wsp
-#                        if j != jj:
-#                           self.wsps[jj][j] = wsp
-#                        logger.info('Done computing workspace element.')
-#                    else:
-#                        logger.info('Workspace element already set for j, jj = {}, {}.'.format(j, jj))
-#
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f0_1, f0_2)
                     # Uncoupling pseudo-Cls
@@ -503,16 +443,6 @@ class MockSurveyParallel(object):
                     emaps = [noisemaps[j], noisemaps[j+self.params['nspin2']]]
                     f2 = nmt.NmtField(self.maskmat[j, j], emaps, purify_b=False, beam=self.pixwin)
 
-#                    if self.wsps[j][j] is None:
-#                        logger.info('Workspace element for j, j = {}, {} not set.'.format(j, j))
-#                        logger.info('Computing workspace element.')
-#                        wsp = nmt.NmtWorkspace()
-#                        wsp.compute_coupling_matrix(f2, f2, b)
-#                        self.wsps[j][j] = wsp
-#                        logger.info('Done computing workspace element.')
-#                    else:
-#                        logger.info('Workspace element already set for j, j = {}, {}.'.format(j, j))
-
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f2, f2)
                     # Uncoupling pseudo-Cls
@@ -529,16 +459,6 @@ class MockSurveyParallel(object):
                     emaps = [noisemaps[j]]
                     f0 = nmt.NmtField(self.maskmat[j, j], emaps, purify_b=False, beam=self.pixwin)
 
-#                    if self.wsps[j][j] is None:
-#                        logger.info('Workspace element for j, j = {}, {} not set.'.format(j, j))
-#                        logger.info('Computing workspace element.')
-#                        wsp = nmt.NmtWorkspace()
-#                        wsp.compute_coupling_matrix(f0, f0, b)
-#                        self.wsps[j][j] = wsp
-#                        logger.info('Done computing workspace element.')
-#                    else:
-#                        logger.info('Workspace element already set for j, j = {}, {}.'.format(j, j))
-#
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f0, f0)
                     # Uncoupling pseudo-Cls
@@ -547,122 +467,28 @@ class MockSurveyParallel(object):
 
         return cls, noisecls, ells_uncoupled
 
-    def compute_wsps(self):
-        """
-        Convenience method for calculating the NaMaster workspaces for all the probes in the simulation.
-        :return wsps: wsps list
-        """
 
-        wsps = [[None for i in range(self.params['nprobes'])] for ii in range(self.params['nprobes'])]
 
-        maps = self.simmaps.generate_maps()
 
-        l0_bins = np.around(self.params['l0_bins']).astype('int')
-        lf_bins = np.around(self.params['lf_bins']).astype('int')
 
-        ells = np.arange(np.amax(lf_bins))
-        weights = np.zeros_like(ells, dtype='float64')
-        bpws = -1*np.ones_like(ells)
-        # Careful: bins start at zero
-        for i in range(l0_bins.shape[0]):
-            bpws[l0_bins[i]:lf_bins[i]] = i
-            weights[l0_bins[i]:lf_bins[i]] = 1./(lf_bins[i]-l0_bins[i])
 
-        b = nmt.NmtBin(self.params['nside'], bpws=bpws, ells=ells, weights=np.ones_like(ells))
 
-        # Compute workspaces for all the probes
-        for j in range(self.params['nprobes']):
-            for jj in range(j+1):
-                spin1 = self.params['spins'][j]
-                spin2 = self.params['spins'][jj]
 
-                logger.info('Computing workspace element for j, jj = {}, {}.'.format(j, jj))
-                logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
-                if spin1 == 2 and spin2 == 0:
-                    # Define curved sky spin-2 field
-                    emaps = [maps[j], maps[j+self.params['nspin2']]]
-                    f2_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
-                    # Define curved sky spin-0 field
-                    emaps = [maps[jj]]
-                    f0_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
 
-                    logger.info('Computing workspace element.')
-                    wsp = nmt.NmtWorkspace()
-                    wsp.compute_coupling_matrix(f2_1, f0_1, b)
-                    wsps[j][jj] = wsp
-                    if j != jj:
-                        wsps[jj][j] = wsp
-                    logger.info('Done computing workspace element.')
 
-                elif spin1 == 2 and spin2 == 2:
-                    # Define flat sky spin-2 field
-                    emaps = [maps[j], maps[j+self.params['nspin2']]]
-                    f2_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
-                    # Define flat sky spin-0 field
-                    emaps = [maps[jj], maps[jj+self.params['nspin2']]]
-                    f2_2 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
 
-                    logger.info('Computing workspace element.')
-                    wsp = nmt.NmtWorkspace()
-                    wsp.compute_coupling_matrix(f2_1, f2_2, b)
-                    wsps[j][jj] = wsp
-                    if j != jj:
-                       wsps[jj][j] = wsp
-                    logger.info('Done computing workspace element.')
 
-                else:
-                    # Define flat sky spin-0 field
-                    emaps = [maps[j]]
-                    f0_1 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
-                    # Define flat sky spin-0 field
-                    emaps = [maps[jj]]
-                    f0_2 = nmt.NmtField(self.maskmat[j, jj], emaps, purify_b=False, beam=self.pixwin)
 
-                    logger.info('Computing workspace element.')
-                    wsp = nmt.NmtWorkspace()
-                    wsp.compute_coupling_matrix(f0_1, f0_2, b)
-                    wsps[j][jj] = wsp
-                    if j != jj:
-                       wsps[jj][j] = wsp
-                    logger.info('Done computing workspace element.')
 
-        return wsps
 
-    def init_maps(self):
-        """
-        Initialises an array of masks from the input mask array using the specifications
-        in params.
-        :param :
-        :return maskmat: 3D array with 0. and 1. axis denoting the number of the map to cross correlate
-        (i.e. the power spectrum) and the 3. axis is the mask belonging to this index
-        This is different for separate masks for the cross correlation or combined masks for the cross correlation
-        """
 
-        maskmat = np.zeros((self.params['nprobes'], self.params['nprobes'], self.params['nhppix']))
-        k = 0
-        # 1st case: We give a combined mask to the cross power spectrum
-        if len(self.masks) > self.params['nprobes']:
-            logger.info('Number of provided masks larger than number of probes.')
-            logger.info('Setting the mask for the cross power spectrum to the provided combined mask.')
-            for i in range(self.params['nprobes']):
-                tempmask = self.masks[i]
-                maskmat[i, i, :] = tempmask
-                k += 1
-            for i in range(self.params['nprobes']):
-                for ii in range(self.params['nprobes']):
-                    if i < ii:
-                        tempmask = self.masks[k]
-                        maskmat[i, ii, :] = tempmask
-                        maskmat[ii, i, :] = tempmask
-                        k += 1
-        elif self.params['nprobes'] == 1 and len(self.masks) == 1:
-            for i in range(self.params['nprobes']):
-                tempmask = self.masks[i]
-                maskmat[i, i, :] = tempmask
-        else:
-            raise NotImplementedError('No other masking option implemented yet. Aborting.')
 
-        return maskmat
+
+
+
+
+
+
 
 
 
