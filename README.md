@@ -8,6 +8,7 @@ Scripts for computing cross-correlations for SO
 * `healpy`: [https://healpy.readthedocs.io/en/latest](https://healpy.readthedocs.io/en/latest) (for curved sky computations)
 * `pyyaml`: [https://pyyaml.org/wiki/PyYAMLDocumentation](https://pyyaml.org/wiki/PyYAMLDocumentation) (to read input files)
 * `astropy`: [https://github.com/astropy/astropy](https://github.com/astropy/astropy)
+* `sharedmem`: [https://pypi.org/project/sharedmem/0.3/] (for multiprocessing via forking rather than pickling)
 
 ## Installation on cori
 
