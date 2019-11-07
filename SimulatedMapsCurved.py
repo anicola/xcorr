@@ -61,15 +61,22 @@ class SimulatedMaps(object):
         # Now create the maps with the correlations between both spin-0 and spin-2 fields
 
 
-        print("tests")
-        print("nside", self.params['nside'])
-        print("cl shape", self.cls.shape)
-        print("spins", self.params['spins'])
-        print("pixwinarr shape", self.pixwinarr.shape)
-
+#        print("tests")
+#        print("nside", self.params['nside'])
+#        print("cl shape", self.cls.shape)
+#        print("spins", self.params['spins'])
+#        print("pixwinarr shape", self.pixwinarr.shape)
+#
+#        print('Cl = '+str(self.cls))
+#        print('min/max Cl = '+str(np.min(self.cls))+', '+str(np.max(self.cls)))
+#
 
         maps = nmt.synfast_spherical(self.params['nside'], self.cls, spin_arr=self.params['spins'], seed=-1, \
                                      beam=self.pixwinarr)
+#        maps = nmt.synfast_spherical(self.params['nside'], self.cls, spin_arr=self.params['spins'], seed=-1, \
+#                                     beam=None)
+
+        print('Mean of all map values'+str(np.mean(maps)))
         logger.info('Gaussian maps done for one realization')
 
         if self.params['nspin2'] > 0:

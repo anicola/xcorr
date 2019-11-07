@@ -2,14 +2,14 @@
 
 # Parameters defining signal maps
 simparams:
-    nrealiz: 100   # for testing. Go back to ~100
+    nrealiz: 32
     probes: ['cmbkappa']
     spins: [0]
     path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
     l0_bins: [213.0373, 291.0176, 397.5417, 543.0580, 741.8391, 1013.3821, 1384.3207, 1891.0378]
     lf_bins: [291.0176, 397.5417, 543.0580, 741.8391, 1013.3821, 1384.3207, 1891.0378, 2583.2338]
-    nside: 1024 # for testing purposes. Go back to 1024
-    pixwindow: 1
+    nside: 1024
+    pixwindow: 0
     nell_theor: 3501
 
 # Parameters defining noise maps

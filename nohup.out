@@ -1,0 +1,782 @@
+generate_mocks.py:26: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  config = yaml.load(open(args.path2config))
+INFO:__main__:Read config from ./configs/k-LSSTxSO-curved-footmask.yaml.
+INFO:__main__:Generating noisy mocks.
+INFO:MockSurveyCurved_parallel:Applying workspace caching.
+INFO:MockSurveyCurved_parallel:Setting up workspace attribute.
+INFO:MockSurveyCurved_parallel:Applying pixel window function correction for NSIDE = 1024.
+INFO:MockSurveyCurved_parallel:Number of provided masks larger than number of probes.
+INFO:MockSurveyCurved_parallel:Setting the mask for the cross power spectrum to the provided combined mask.
+INFO:MockSurveyCurved_parallel:Generating all the namaster workspaces
+INFO:MockSurveyCurved_parallel:Checking workspace for probe1 = cmbkappa and probe2 = cmbkappa.
+INFO:MockSurveyCurved_parallel:Spins: spin1 = 0, spin2 = 0.
+INFO:MockSurveyCurved_parallel:Workspace element for j, jj = 0, 0 not set.
+INFO:MockSurveyCurved_parallel:Computing workspace element.
+INFO:MockSurveyCurved_parallel:Done computing workspace element.
+INFO:MockSurveyCurved_parallel:workspaces took 6.81077135007 min
+INFO:SimulatedMapsCurved:Setting up SimulatedMaps module.
+INFO:SimulatedMapsCurved:pixwindow = 1.
+INFO:SimulatedMapsCurved:Applying pixel window function correction for NSIDE = 1024.
+INFO:SimulatedMapsCurved:Setting up cl array.
+INFO:SimulatedMapsCurved:Cl array shape = (1, 3501).
+INFO:SimulatedMapsCurved:Reading cls for probe1 = cmbkappa and probe2 = cmbkappa.
+INFO:SimulatedMapsCurved:Read /global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt.
+INFO:SimulatedMapsCurved:Setup done!
+INFO:SimulatedMapsCurved:SimulatedMaps has been initialised with the following attributes:
+INFO:SimulatedMapsCurved:nprobes = 1
+INFO:SimulatedMapsCurved:nautocls = 1
+INFO:SimulatedMapsCurved:path2cls = ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
+INFO:SimulatedMapsCurved:nrealiz = 64
+INFO:SimulatedMapsCurved:nspin2 = 0
+INFO:SimulatedMapsCurved:nside = 1024
+INFO:SimulatedMapsCurved:pixwindow = 1
+INFO:SimulatedMapsCurved:nell = 8
+INFO:SimulatedMapsCurved:ncls = 1
+INFO:SimulatedMapsCurved:nhppix = 12582912
+INFO:SimulatedMapsCurved:tempbeam = False
+INFO:SimulatedMapsCurved:spins = [0]
+INFO:SimulatedMapsCurved:l0_bins = [ 213.0373  291.0176  397.5417  543.058   741.8391 1013.3821 1384.3207
+ 1891.0378]
+INFO:SimulatedMapsCurved:lf_bins = [291.0176, 397.5417, 543.058, 741.8391, 1013.3821, 1384.3207, 1891.0378, 2583.2338]
+INFO:SimulatedMapsCurved:nell_theor = 3501
+INFO:SimulatedMapsCurved:probes = ['cmbkappa']
+INFO:NoiseMapsCurved:Setting up NoiseMaps module.
+INFO:NoiseMapsCurved:Setup done!
+INFO:NoiseMapsCurved:NoiseMaps has been initialised with the following attributes:
+INFO:MockSurveyCurved_parallel:SimulatedMaps has been initialised with the following attributes:
+INFO:MockSurveyCurved_parallel:Number of available CPUs 64.
+NSIDE = 1024
+ORDERING = RING in fits file
+INDXSCHM = IMPLICIT
+nprobes = 1
+nautocls = 1
+path2noisecls = ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt']
+nside = 1024
+nspin2 = 0
+nmaps = 1
+ncls = 1
+noisemodel = theory
+spins = [0]
+probes = ['cmbkappa']
+nprobes = 1
+nautocls = 1
+path2cls = ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
+nrealiz = 64
+nspin2 = 0
+nside = 1024
+pixwindow = 1
+nell = 8
+ncls = 1
+nhppix = 12582912
+tempbeam = False
+spins = [0]
+l0_bins = [ 213.0373  291.0176  397.5417  543.058   741.8391 1013.3821 1384.3207
+ 1891.0378]
+noise = True
+lf_bins = [291.0176, 397.5417, 543.058, 741.8391, 1013.3821, 1384.3207, 1891.0378, 2583.2338]
+nell_theor = 3501
+probes = ['cmbkappa']
+INFO:MockSurveyCurved_parallel:Running realisation: 0.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 1.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 2.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 3.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 4.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 5.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 6.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 7.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 8.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 9.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 10.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 11.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 12.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 13.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 14.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 15.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 16.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 17.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 18.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 19.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 20.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 21.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 22.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 23.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 24.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 25.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 26.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 27.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 28.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 29.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 30.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 31.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 32.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 33.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 34.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 35.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 36.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 37.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 38.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 39.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 40.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 41.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 42.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 43.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 44.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 45.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 46.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 47.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 48.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 49.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 50.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 51.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 52.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 53.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 54.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 55.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 56.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 57.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 58.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 59.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 60.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 61.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 62.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:MockSurveyCurved_parallel:Running realisation: 63.
+INFO:SimulatedMapsCurved:Generating Gaussian maps for one realization
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:SimulatedMapsCurved:Gaussian maps done for one realization
+INFO:SimulatedMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:Generating noise maps.
+INFO:NoiseMapsCurved:Reading noise data for probe = cmbkappa.
+INFO:NoiseMapsCurved:Noisemodel = theory.
+INFO:NoiseMapsCurved:Read ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'].
+INFO:NoiseMapsCurved:Generating map for probe = cmbkappa.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 54, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 50, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 24, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 13, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 38, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 58, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 9, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 42, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 6, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 34, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 41, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 17, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 56, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 16, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 15, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 43, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 40, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 22, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 7, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 30, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 5, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 33, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 3, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 32, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 21, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 27, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 57, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 4, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 61, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 36, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 39, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 45, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 20, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 55, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 49, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 2, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 29, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 62, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 31, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 53, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 1, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 19, spins =0-0
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 18, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 63, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 46, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 37, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 59, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 26, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 52, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 47, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 51, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 11, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 44, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 8, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 23, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 25, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 10, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 35, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 28, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 48, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 12, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 0, spins =0-0
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 14, spins =0-0
+INFO:NoiseMapsCurved:No spin 2 fields. Keeping map ordering.
+INFO:MockSurveyCurved_parallel:Computing Cl_cmbkappa_cmbkappa, rea 60, spins =0-0

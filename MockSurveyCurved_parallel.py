@@ -424,9 +424,16 @@ class MockSurveyParallel(object):
 
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f0_1, f0_2)
+
+                    print("###### coupled cls #########")
+                    print(cl_coupled)
+
                     # Uncoupling pseudo-Cls
                     cl_uncoupled = self.wsps[j][jj].decouple_cell(cl_coupled)
                     cls[j, jj, :] = cl_uncoupled
+
+                    print("###### decoupled cl ########")
+                    print(cl_uncoupled)
 
         # If noise is True, then we need to compute the noise from simulations
         # We therefore generate different noise maps for each realisation so that
@@ -461,9 +468,16 @@ class MockSurveyParallel(object):
 
                     # Compute pseudo-Cls
                     cl_coupled = nmt.compute_coupled_cell(f0, f0)
+
+                    print("###### coupled cls #########")
+                    print(cl_coupled)
+                    
                     # Uncoupling pseudo-Cls
                     cl_uncoupled = self.wsps[j][j].decouple_cell(cl_coupled)
                     noisecls[j, j, :] = cl_uncoupled
+
+                    print("###### decoupled cl ########")
+                    print(cl_uncoupled)
 
         return cls, noisecls, ells_uncoupled
 
