@@ -1,5 +1,5 @@
 # xcorr
-Scripts for computing cross-correlations for SO
+Light scripts for computing cross-correlations for SO
 
 ## Requirements:
 
