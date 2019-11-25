@@ -1,0 +1,26 @@
+# CAREFUL: yaml is super sensitive to spaces - don't use tabs
+
+# Parameters defining signal maps
+simparams:
+    nrealiz: 96
+    probes: ['g', 'kcmb']
+    spins: [0, 0]
+    path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
+'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
+    nside: 1024
+    pixwindow: 1
+    #nell_theor: 3501
+    lmax: 10000 # should be a fraction of  
+
+# Parameters defining noise maps
+# If noiseparams: null, then noise-free mocks will be generated
+noiseparams:
+    probes: ['g', 'kcmb']
+    noisemodel: theory
+    path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt']
+
+
+# Parameters defining this specific run
+mode: curved
+path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf'
+
