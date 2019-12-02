@@ -2,7 +2,7 @@
 
 # Parameters defining signal maps
 simparams:
-    nrealiz: 32
+    nrealiz: 1
     probes: ['cmbkappa']
     spins: [0]
     path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']

@@ -1,26 +1,35 @@
 # CAREFUL: yaml is super sensitive to spaces - don't use tabs
+# The generated maps are not convolved with any window function or mask,
+# this will be done when measuring the power spectra
+# Assumes that all maps are either scalar (spin=0) or tensor (spin=2)
+# The probes should be ordered such that the spin 0 fields are first,
+# followed by the spin 2 fields
 
 # Parameters defining signal maps
-simparams:
-    nrealiz: 96
-    probes: ['g', 'kcmb']
-    spins: [0, 0]
-    path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
+#simparams:
+nrealiz: 1
+probes: ['g', 'kcmb']
+spins: [0, 0]
+path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
-    nside: 1024
-    pixwindow: 1
-    #nell_theor: 3501
-    lmax: 10000 # should be a fraction of  
-
-# Parameters defining noise maps
-# If noiseparams: null, then noise-free mocks will be generated
-noiseparams:
-    probes: ['g', 'kcmb']
-    noisemodel: theory
-    path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt']
-
-
-# Parameters defining this specific run
+nside: 1024
+#pixwindow: [1, 0]
+#nell_theor: 3501
+lmax: 9000 # should be a fraction of  
+noisemodel: theory   # None if no noise wanted
+path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt']
 mode: curved
-path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf'
+path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gk_lsstxso_curved'
+
+## Parameters defining noise maps
+## If noiseparams: null, then noise-free mocks will be generated
+#noiseparams:
+#   #probes: ['g', 'kcmb']
+#   #noisemodel: theory
+#    path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt']
+#
+#
+## Parameters defining this specific run
+#mode: curved
+#path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf'
 
