@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# Code to generate GRF mocks, in healpix format
 
 from __future__ import print_function, division, absolute_import, unicode_literals
 
@@ -10,6 +11,8 @@ import os
 import healpy as hp
 import copy
 import pymaster as nmt
+from scipy.interpolate import interp1d
+import sharedmem
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,8 +21,34 @@ logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser(description='Generate a suite of Gaussian mocks.')
 parser.add_argument('--path2config', dest='path2config', type=str, help='Path to yaml config file.', required=True)
+parser.add_argument('--nproc', dest='nproc', type=int, help='Optional number of processes to run.', required=False)
 
 ### END OF PARSER ###
+
+
+
+def enrich_params(params):
+   """
+   Infers the unspecified parameters from the parameters provided and
+   updates the parameter dictionary accordingly.
+   :param :
+   :return :
+   """
+   
+   params = copy.deepcopy(params)
+   params['spins'] = np.array(params['spins'])
+   # The ell array starts at 0, so the number of ells is lmax + 1
+   if 'lmax' in params:
+     params['nell'] = params['lmax']+1
+   # coutning probes, fields, and their power spectra
+   params['nprobes'] = len(params['probes'])
+   params['ncls_probes'] = params['nprobes'] * (params['nprobes'] + 1) // 2
+   params['nScalProbes'] = np.sum(params['spins']==0).astype('int')
+   params['nTensProbes'] = np.sum(params['spins']==2).astype('int')
+   params['nFields'] = params['nScalProbes'] + params['nTensProbes'] * 2
+   params['ncls_fields'] = params['nFields'] * (params['nFields'] + 1) // 2
+   return params
+
 
 
 def read_cl(params):
@@ -36,76 +65,51 @@ def read_cl(params):
    """
 
    logger.info('Setting up cl array.')
-   #nspectra = params['ncls'] + params['nspin2']*(1+params['nprobes'])
-   
-   cls = np.zeros((params['ncls_full'], params['lmax']))
+   cls = np.zeros((params['ncls_fields'], params['nell']))
    print(cls.shape)
    logger.info('Cl array shape = {}.'.format(cls.shape))
 
-   k = 0
-   j = 0
+   # Convert the cls for the probes into the cls for the fields:
+   # for tensor fields, the input power spectra are for only for the E-modes, and assume the B-modes aare zero.
+   # Here, we add the B-modes power, set to zero or to the noise power spectrum
+   k = 0 # index over probe power spectra
+   j = 0 # index over field power spectra
+   # loop over probes, in row-major order
    for i, probe1 in enumerate(params['probes']):
-      for ii in range(i, params['nprobes']):
+      for ii, probe2 in enumerate(params['probes'][i:], start=i):
 
-         probe2 = params['probes'][ii]
          logger.info('Reading cls for probe1 = {} and probe2 = {}.'.format(probe1, probe2))
-
          path2cls = params['path2cls'][k]
          data = np.genfromtxt(path2cls)
          logger.info('Read {}.'.format(path2cls))
-         cls_temp = data[:params['lmax'], 1]
-         # !!! check the size, and interpolate if needed
+         
+         # check that the lmax requested is in the input file
+         if data[-1,0]<params['lmax']:
+            raise ValueError('The lmax required is higher than in the cl input file')
+         # interpolate the input cl, in case it was not given at each ell, 
+         # or did not start at ell=0.
+         fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
+         cls_temp = fcl(np.arange(params['nell']))
+         #cls_temp = data[:params['nell'], 1]
 
          cls[j, :] = cls_temp
+         # fFor spin2-spin2, add the spectra: E1B2, E2B1, B1B2
+         #!!! Warning: are we missing some power spectra here?
          if params['spins'][i] == 2 and params['spins'][ii] == 2:
-            #raise NotImplementedError()
             cls[j+1, :] = np.zeros_like(cls_temp)
             cls[j+2, :] = np.zeros_like(cls_temp)
             j += 3
+         # For spin0-spin2, add the TB power spectrum
          elif params['spins'][i] == 2 and params['spins'][ii] == 0 or params['spins'][i] == 0 and params['spins'][ii] == 2:
-            #raise NotImplementedError()
             cls[j+1, :] = np.zeros_like(cls_temp)
             j += 2
+         # for spin0-spin0, nothing to add
          else:
             j += 1
 
          k += 1
 
    return cls
-
-
-
-
-
-def enrich_params(params):
-   """
-   Infers the unspecified parameters from the parameters provided and
-   updates the parameter dictionary accordingly.
-   :param :
-   :return :
-   """
-   
-   params = copy.deepcopy(params)
-   params['spins'] = np.array(params['spins'])
-   params['nprobes'] = len(params['probes'])
-   params['ncls_input'] = params['nprobes'] * (params['nprobes'] + 1) // 2
-   if 'lmax' in params:
-     params['nell'] = params['lmax']+1
-   elif 'l0_bins'in params:
-     params['nell'] = int(params['l0_bins'].shape[0])
-   params['nspin2'] = np.sum(params['spins'] == 2).astype('int')
-   params['nautocls'] = params['nprobes']+params['nspin2']
-   params['nhppix'] = hp.nside2npix(params['nside'])
-   params['nScalProbes'] = np.sum(params['spins']==0)
-   params['nTensProbes'] = np.sum(params['spins']==2)
-   params['nFields'] = params['nScalProbes'] + params['nTensProbes'] * 2
-   params['ncls_full'] = params['nFields'] * (params['nFields'] + 1) // 2
-   return params
-
-
-
-
-
 
 
 
@@ -151,11 +155,6 @@ def generate_map(params, cls, iRea):
 
 
 
-   # Assuming all maps are either scalar or vector
-#   nMaps = reordered_maps.shape[0]
-#   nScalProbes = np.sum(params['spins']==0)
-#   nTensProbes = np.sum(params['spins']==2)
-
    # Saving the scalar maps
    for iScalProbe in range(params['nScalProbes']):
       iMap = iScalProbe
@@ -190,7 +189,6 @@ def generate_map(params, cls, iRea):
       # jump 2 by 2 for tensor maps
       iMap += 2
 
-
    return maps
 
 
@@ -222,55 +220,46 @@ def generate_map(params, cls, iRea):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
 
    args = parser.parse_args()
 
-   config = yaml.load(open(args.path2config))
+   # read parameters from yaml file
    logger.info('Read config from {}.'.format(args.path2config))
-
-   nrealiz = config['nrealiz']
-   
-
-
+   config = yaml.load(open(args.path2config))
+   # add inferred parameters from yaml file
    params = enrich_params(config)
 
-   if config['mode'] == 'curved':
-    pass
-   else:
-    raise NotImplementedError()
-
-   if 'spins' in config:
-    config['spins'] = np.array(config['spins'])
-
-   if config['noisemodel'] is not None:
-    logger.info('Generating noisy mocks.')
-   else:
-    logger.info('Generating noise-free mocks.')
-
+   # create output directory if needed
    if not os.path.isdir(config['path2outputdir']):
-    try:
-       os.makedirs(config['path2outputdir'])
-    except:
-       pass
+      os.makedirs(config['path2outputdir'])
+
+   # Only curved (healpix) maps for now
+   if config['mode'] <> 'curved':
+      raise NotImplementedError()
+
+   # Only implemented noise free maps for now
+   if config['noisemodel'] is not None:
+      logger.info('Generating noisy mocks.')
+   else:
+      logger.info('Generating noise-free mocks.')
+   
 
    # read the input theory cl
    # modify to add the noise power spectrum to the autos
    clArray = read_cl(params)
 
+   # Number of processes to run on
+   if args.nproc is None:
+      nProc = 1
+   else:
+      nProc = args.nproc
+   logger.info('Running on '+str(nProc)+' processes')
 
    # generate and save all the mock maps
-   maps = generate_map(params, clArray, 0)
-   # big parallel for loop
-   # careful about the seeds
+   #maps = generate_map(params, clArray, 0)
+   nRea = config['nrealiz']
+   with sharedmem.MapReduce(np=nProc) as pool:
+      f = lambda iRea:  generate_map(params, clArray, iRea)
+      pool.map(f, range(nRea))
+
