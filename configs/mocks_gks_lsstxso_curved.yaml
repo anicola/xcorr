@@ -19,6 +19,6 @@ path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_ks.txt', 
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_ss.txt']
 
-noisemodel: theory   # None if no noise wanted
+# If no noise wanted, comment out the line below
 path2noisecls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt', 
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_ss.txt']

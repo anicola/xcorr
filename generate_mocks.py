@@ -146,7 +146,6 @@ def read_cl(params):
    3. axis is the power spectrum belonging to this index
    """
 
-
    # 2d matrix of cls for the fields
    clFieldsMat = np.zeros((params['nFields'], params['nFields'], params['nell']))
 
@@ -158,14 +157,27 @@ def read_cl(params):
    jField = 0
    # loop over probes, in row-major order
    for iProbe1, probe1 in enumerate(params['probes']):
-      for iProbe2, probe2 in enumerate(params['probes'][iProbe1:], start=iProbe1):
 
+      if params['path2noisecls'] is not None:
+         path = params['path2noisecls'][iProbe1]
+         logger.info('Read noise power from {}.'.format(path))
+         data = np.genfromtxt(path)
+         # check that the lmax requested is in the input file
+         if data[-1,0]<params['lmax']:
+            raise ValueError('The lmax required is higher than in the cl input file')
+         # interpolate the input cl, in case it was not given at each ell, 
+         # or did not start at ell=0.
+         fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
+         noisecls_temp = fcl(np.arange(params['nell']))
+      else:
+         noisecls_temp = np.zeros_like(cls_temp)
+
+      for iProbe2, probe2 in enumerate(params['probes'][iProbe1:], start=iProbe1):
          logger.info('Reading cls for probe1 = {} and probe2 = {}.'.format(probe1, probe2))
-         path2cls = params['path2cls'][iProbePair]
-         data = np.genfromtxt(path2cls)
-         logger.info('Read {}.'.format(path2cls))
-         iProbePair += 1
-         
+
+         path = params['path2cls'][iProbePair]
+         logger.info('Read signal power from {}.'.format(path))
+         data = np.genfromtxt(path)
          # check that the lmax requested is in the input file
          if data[-1,0]<params['lmax']:
             raise ValueError('The lmax required is higher than in the cl input file')
@@ -173,21 +185,23 @@ def read_cl(params):
          # or did not start at ell=0.
          fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
          cls_temp = fcl(np.arange(params['nell']))
+         # Move to the next pair of probes in the input cls
+         iProbePair += 1
 
          # If spin0 - spin0, just copy the power spectrum
          if params['spins'][iProbe1]==0 and params['spins'][iProbe2]==0:
-            clFieldsMat[iField, jField, :] = cls_temp
+            clFieldsMat[iField, jField, :] = cls_temp + (iProbe1==iProbe2) * noisecls_temp
             jField += 1
          # If spin0 - spin2, add the TB power spectrum
          if params['spins'][iProbe1]==0 and params['spins'][iProbe2]==2:
             clFieldsMat[iField, jField, :] = cls_temp
-            #clFieldsMat[iField, jField+1, :]
+            #clFieldsMat[iField, jField+1, :] = np.zeros_like(cls_temp)
             jField += 2
          # If spin2 - spin2, add the E1B2 and B1B2 power spectra
          if params['spins'][iProbe1]==2 and params['spins'][iProbe2]==2:
-            clFieldsMat[iField, jField, :] = cls_temp
-            #clFieldsMat[iField, jField+1, :]
-            #clFieldsMat[iField+1, jField+1, :]
+            clFieldsMat[iField, jField, :] = cls_temp + (iProbe1==iProbe2) * noisecls_temp
+            #clFieldsMat[iField, jField+1, :] = np.zeros_like(cls_temp)
+            clFieldsMat[iField+1, jField+1, :] = (iProbe1==iProbe2) * noisecls_temp
             jField += 2
 
       # set the row index to the new line, for the new probe1
@@ -369,7 +383,7 @@ if __name__ == '__main__':
       raise NotImplementedError()
 
    # Only implemented noise free maps for now
-   if config['noisemodel'] is not None:
+   if config['path2noisecls'] is not None:
       logger.info('Generating noisy mocks.')
    else:
       logger.info('Generating noise-free mocks.')
