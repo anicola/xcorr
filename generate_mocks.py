@@ -51,6 +51,88 @@ def enrich_params(params):
 
 
 
+#def read_cl(params):
+#   """
+#   Reads in all the auto and cross power spectra needed to construct the set of
+#   correlated maps.
+#   It also multiplies the theoretical power spectra by the HEALPix pixel window
+#   functions and if the flag tempbeam is set it also multiplies them by the CMB
+#   beam window function.
+#   This is in order to test the pixel and beam window deconvolutions.
+#   :param :
+#   :return cls: 3D array with 0. and 1. axis denoting the number of the power spectrum and the
+#   3. axis is the power spectrum belonging to this index
+#   """
+#
+#   logger.info('Setting up cl array.')
+#   cls = np.zeros((params['ncls_fields'], params['nell']))
+#   print(cls.shape)
+#   logger.info('Cl array shape = {}.'.format(cls.shape))
+#
+#   # Convert the cls for the probes into the cls for the fields:
+#   # for tensor fields, the input power spectra are for only for the E-modes, and assume the B-modes aare zero.
+#   # Here, we add the B-modes power, set to zero or to the noise power spectrum
+#   k = 0 # index over probe power spectra
+#   j = 0 # index over field power spectra
+#   # loop over probes, in row-major order
+#   for i, probe1 in enumerate(params['probes']):
+#      for ii, probe2 in enumerate(params['probes'][i:], start=i):
+#
+#         logger.info('Reading cls for probe1 = {} and probe2 = {}.'.format(probe1, probe2))
+#         path2cls = params['path2cls'][k]
+#         data = np.genfromtxt(path2cls)
+#         logger.info('Read {}.'.format(path2cls))
+#         
+#         # check that the lmax requested is in the input file
+#         if data[-1,0]<params['lmax']:
+#            raise ValueError('The lmax required is higher than in the cl input file')
+#         # interpolate the input cl, in case it was not given at each ell, 
+#         # or did not start at ell=0.
+#         fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
+#         cls_temp = fcl(np.arange(params['nell']))
+#         #cls_temp = data[:params['nell'], 1]
+#
+#         cls[j, :] = cls_temp
+#         # fFor spin2-spin2, add the spectra: E1B2, E2B1, B1B2
+#         #!!! Warning: are we missing some power spectra here?
+#         if params['spins'][i] == 2 and params['spins'][ii] == 2:
+#            cls[j+1, :] = np.zeros_like(cls_temp)
+#            cls[j+2, :] = np.zeros_like(cls_temp)
+#            j += 3
+#         # For spin0-spin2, add the TB power spectrum
+#         elif params['spins'][i] == 2 and params['spins'][ii] == 0 or params['spins'][i] == 0 and params['spins'][ii] == 2:
+#            cls[j+1, :] = np.zeros_like(cls_temp)
+#            j += 2
+#         # for spin0-spin0, nothing to add
+#         else:
+#            j += 1
+#
+#         k += 1
+#
+#   return cls
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def read_cl(params):
    """
    Reads in all the auto and cross power spectra needed to construct the set of
@@ -64,24 +146,25 @@ def read_cl(params):
    3. axis is the power spectrum belonging to this index
    """
 
-   logger.info('Setting up cl array.')
-   cls = np.zeros((params['ncls_fields'], params['nell']))
-   print(cls.shape)
-   logger.info('Cl array shape = {}.'.format(cls.shape))
+
+   # 2d matrix of cls for the fields
+   clFieldsMat = np.zeros((params['nFields'], params['nFields'], params['nell']))
 
    # Convert the cls for the probes into the cls for the fields:
    # for tensor fields, the input power spectra are for only for the E-modes, and assume the B-modes aare zero.
    # Here, we add the B-modes power, set to zero or to the noise power spectrum
-   k = 0 # index over probe power spectra
-   j = 0 # index over field power spectra
+   iProbePair = 0
+   iField = 0
+   jField = 0
    # loop over probes, in row-major order
-   for i, probe1 in enumerate(params['probes']):
-      for ii, probe2 in enumerate(params['probes'][i:], start=i):
+   for iProbe1, probe1 in enumerate(params['probes']):
+      for iProbe2, probe2 in enumerate(params['probes'][iProbe1:], start=iProbe1):
 
          logger.info('Reading cls for probe1 = {} and probe2 = {}.'.format(probe1, probe2))
-         path2cls = params['path2cls'][k]
+         path2cls = params['path2cls'][iProbePair]
          data = np.genfromtxt(path2cls)
          logger.info('Read {}.'.format(path2cls))
+         iProbePair += 1
          
          # check that the lmax requested is in the input file
          if data[-1,0]<params['lmax']:
@@ -90,26 +173,73 @@ def read_cl(params):
          # or did not start at ell=0.
          fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
          cls_temp = fcl(np.arange(params['nell']))
-         #cls_temp = data[:params['nell'], 1]
 
-         cls[j, :] = cls_temp
-         # fFor spin2-spin2, add the spectra: E1B2, E2B1, B1B2
-         #!!! Warning: are we missing some power spectra here?
-         if params['spins'][i] == 2 and params['spins'][ii] == 2:
-            cls[j+1, :] = np.zeros_like(cls_temp)
-            cls[j+2, :] = np.zeros_like(cls_temp)
-            j += 3
-         # For spin0-spin2, add the TB power spectrum
-         elif params['spins'][i] == 2 and params['spins'][ii] == 0 or params['spins'][i] == 0 and params['spins'][ii] == 2:
-            cls[j+1, :] = np.zeros_like(cls_temp)
-            j += 2
-         # for spin0-spin0, nothing to add
-         else:
-            j += 1
+         # If spin0 - spin0, just copy the power spectrum
+         if params['spins'][iProbe1]==0 and params['spins'][iProbe2]==0:
+            clFieldsMat[iField, jField, :] = cls_temp
+            jField += 1
+         # If spin0 - spin2, add the TB power spectrum
+         if params['spins'][iProbe1]==0 and params['spins'][iProbe2]==2:
+            clFieldsMat[iField, jField, :] = cls_temp
+            #clFieldsMat[iField, jField+1, :]
+            jField += 2
+         # If spin2 - spin2, add the E1B2 and B1B2 power spectra
+         if params['spins'][iProbe1]==2 and params['spins'][iProbe2]==2:
+            clFieldsMat[iField, jField, :] = cls_temp
+            #clFieldsMat[iField, jField+1, :]
+            #clFieldsMat[iField+1, jField+1, :]
+            jField += 2
 
-         k += 1
+      # set the row index to the new line, for the new probe1
+      if params['spins'][iProbe1]==0:
+         iField += 1
+      if params['spins'][iProbe1]==2:
+         iField += 2
+      # set the column index to the row index,
+      # since we start on the diagonal
+      jField = iField
+
+
+   # Convert the 2d matrix into a 1d array,
+   # in row-major order
+   cls = np.zeros((params['ncls_fields'], params['nell']))
+   iFieldPair = 0
+   for iField in range(params['nFields']):
+      for jField in range(iField, params['nFields']):
+         cls[iFieldPair,:] = clFieldsMat[iField, jField, :]
+         iFieldPair += 1
+
 
    return cls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
