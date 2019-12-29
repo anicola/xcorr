@@ -1,5 +1,5 @@
 # xcorr
-Scripts for computing cross-correlations for SO
+Scripts for computing cross-correlations for Simons Observatory
 
 ## Requirements:
 
