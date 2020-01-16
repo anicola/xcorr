@@ -8,7 +8,7 @@
 
 
 # Input needed to generate sims and compute Cl
-mode: curved
+mode: 'curved'
 path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved'
 nrealiz: 100 #2
 probes: ['g', 'kcmb', 'shear']

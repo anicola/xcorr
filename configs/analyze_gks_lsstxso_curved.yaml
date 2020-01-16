@@ -9,7 +9,7 @@
 
 # Input needed to generate sims and compute Cl
 #mode: 'curved'
-#path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved'
+pathOutputDir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved'
 #nrealiz: 100 #2
 #probes: ['g', 'kcmb', 'shear']
 #spins: [0, 0, 2]
@@ -31,10 +31,13 @@ pathNoiseClTheory: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt',
 
 # Input needed to compute Cl
 mode: 'curved'
-lMinCl: 5.
-lMaxCl: 3000.
+lMinCl: 5
+lMaxCl: 3000
 nBinsCl: 20
-spacingCl: 'lin' # 'log'
+binSpacing: 'lin' # 'log'
+binWeighting: 'numModes'  # uniform
+
+nameOutputClFile: 'test0'
 
 spins: [0, 0]
 pixWindow: [0, 0]
