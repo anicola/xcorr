@@ -37,9 +37,14 @@ nameOutputClFile: 'test0'
 
 spins: [0, 0]
 pixWindow: [0, 0]
-pathMap1: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside1024_lmax9000_curved_rea0.fits'
+pathMap1: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside2048_lmax9000_curved_rea0.fits'
 pathMask1: 
-pathMap2: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside1024_lmax9000_curved_rea0.fits'
+pathMap2: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside2048_lmax9000_curved_rea0.fits'
 pathMask2:
-pathClTheory: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt'
+pathCl12: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt'
+pathCl11: # only needed if map1<>map2
+pathCl22: # only needed if map1<>map2
+
+
+
 

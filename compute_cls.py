@@ -38,7 +38,7 @@ parser.add_argument('--pathMap1', dest='pathMap1', type=str, required=False)
 parser.add_argument('--pathMask1', dest='pathMask1', type=str, required=False)
 parser.add_argument('--pathMap2', dest='pathMap2', type=str, required=False)
 parser.add_argument('--pathMask2', dest='pathMask2', type=str, required=False)
-parser.add_argument('--pathClTheory', dest='pathClTheory', type=str, required=False)
+parser.add_argument('--pathCl12', dest='pathCl12', type=str, required=False)
 
 
 ### END OF PARSER ###
@@ -46,18 +46,45 @@ parser.add_argument('--pathClTheory', dest='pathClTheory', type=str, required=Fa
 
 
 def read_cl(config):
-
    #!!! Only implemented for scalar fields   
-   logger.info('Reading cls from '+config['pathClTheory'])
-   data = np.genfromtxt(config['pathClTheory'])
+   
+   # Cl_12
+   logger.info('Reading cl12 from '+config['pathCl12'])
+   data = np.genfromtxt(config['pathCl12'])
    # check that the lmax requested is in the input file
    if data[-1,0]<config['lMaxCl']:
       raise ValueError('The lmax required is higher than in the cl input file')
    # interpolate the input cl, in case it was not given at each ell, 
    # or did not start at ell=0.
-   fClTheory = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+   fCl12 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
    
-   return fClTheory
+   # Cl_11
+   if config('pathCl11') is not None:
+      logger.info('Reading cl11 from '+config['pathCl11'])
+      data = np.genfromtxt(config['pathCl11'])
+      # check that the lmax requested is in the input file
+      if data[-1,0]<config['lMaxCl']:
+         raise ValueError('The lmax required is higher than in the cl input file')
+      # interpolate the input cl, in case it was not given at each ell, 
+      # or did not start at ell=0.
+      fCl11 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+   else:
+      fCl11 = fCl12
+
+   # Cl_22
+   if config('pathCl11') is not None:
+      logger.info('Reading cl22 from '+config['pathCl22'])
+      data = np.genfromtxt(config['pathCl22'])
+      # check that the lmax requested is in the input file
+      if data[-1,0]<config['lMaxCl']:
+         raise ValueError('The lmax required is higher than in the cl input file')
+      # interpolate the input cl, in case it was not given at each ell, 
+      # or did not start at ell=0.
+      fCl22 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+   else:
+      fCl22 = fCl12
+   
+   return fCl12, fCl11, fCl22
    
 
 
@@ -197,15 +224,31 @@ if __name__ == '__main__':
       cl_out = np.vstack((ells_decoupled, cl_decoupled))
       
       # read the theory cl if requested
-      if config['pathClTheory']<>'None':
+      if config['pathCl12']<>'None':
          # read the theory Cl
-         fClTheory = read_cl(config)
+         fClTheory, fCl11, fCl22 = read_cl(config)
+
+         
+         # couple, bin and decouple the theory
+         logger.info('Theory cl: couple, bin, decouple')
          clTheory = [fClTheory(ells)]
          # couple with the mask, bin, then decouple
          clTheory_decoupled = wsp.decouple_cell(wsp.couple_cell(clTheory))
          # array of measured cl to be saved to file
          clTheory_out = np.vstack((ells_decoupled, clTheory_decoupled))
          # save it to file
+
+         # Theory Gaussian covariance
+         logger.info('Theory cov')
+         tStart = time()
+         cw = nmt.NmtCovarianceWorkspace()
+         cw.compute_coupling_coefficients(wsp, wsp)
+         cl12 = fClTheory(np.arange(cw.wsp.lmax_a+1))
+         cl11 = fCl11(np.arange(cw.wsp.lmax_a+1))
+         cl22 = fCl22(np.arange(cw.wsp.lmax_a+1))
+         cov = nmt.gaussian_covariance(cw, cl11, cl12, cl12, cl22)
+         tStop = time()
+         logger.info('took '+str((tStop-tStart)/60.)+' min')
 
 
    # Check that output directory exists, create it if not
@@ -224,30 +267,45 @@ if __name__ == '__main__':
    logger.info('Written measured cls to {}.'.format(path))
 
    # Save the theory cl to file if requested
-   if config['pathClTheory']<>'None':
+   if config['pathCl12']<>'None':
       path = pathOutputDir + "/" + config['nameOutputClFile'] + "_ theorycl.txt"
       np.savetxt(path, clTheory_out.T)
       logger.info('Written theory cls to {}.'.format(path))
-       
+      
+      path = pathOutputDir + "/" + config['nameOutputClFile'] + "_ theorycov.txt"
+      np.savetxt(path, cov)
+      logger.info('Written theory cov to {}.'.format(path))
+      
 
    # plot to check
    if True:
 
-      # Quick anafast
-      clHp = hp.anafast(map1, map2)
-      ellHp = np.arange(len(clHp))
-      clTheoryHp = fClTheory(ellHp)
-      lCenBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, ellHp, statistic='mean', bins=20)
-      ClBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, clHp, statistic='mean', bins=20)
-      ClTheoryBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, clTheoryHp, statistic='mean', bins=20)
-      
 
+#      nSide = 1024
+#
+#      cl = fClTheory(np.arange(3.*nSide))
+#      map1 = hp.synfast(cl, nSide)
+#      map2 = map1
+#
+#      map1alm = hp.map2alm(map1)
+#      map1 = hp.alm2map(map1alm, nSide)
+#      map2 = map1
+#
+#      # Quick anafast
+#      clHp = hp.anafast(map1, map2)
+#      ellHp = np.arange(len(clHp))
+#      clTheoryHp = fClTheory(ellHp)
+#      lCenBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, ellHp, statistic='mean', bins=20)
+#      ClBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, clHp, statistic='mean', bins=20)
+#      ClTheoryBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, clTheoryHp, statistic='mean', bins=20)
+#      
+#
 
       fig=plt.figure(0)
       ax=fig.add_subplot(111)
       #
-      ax.plot(ells_decoupled, cl_decoupled[0], 'bx', label=r'Measured, decoupled')
-      ax.plot(ells_decoupled, -cl_decoupled[0], 'rx')
+      ax.errorbar(ells_decoupled, cl_decoupled[0], yerr=np.sqrt(np.diag(cov)), c='b', label=r'Measured, decoupled')
+      ax.errorbar(ells_decoupled, -cl_decoupled[0], yerr=np.sqrt(np.diag(cov)), c='r')
       ax.plot(ells_decoupled, clTheory_decoupled[0], '.', label=r'Theory, binned \& decoupled')
       ax.plot(ells, fClTheory(ells), label=r'Theory')
       #
@@ -256,13 +314,13 @@ if __name__ == '__main__':
       ax.set_xlabel(r'$\ell$')
       ax.set_ylabel(r'$C_\ell$')
 
+
       fig=plt.figure(1)
       ax=fig.add_subplot(111)
       #
+      #ax.plot(lCenBinnedHp, ClBinnedHp / ClTheoryBinnedHp - 1., 'g.')
 
-      ax.plot(lCenBinnedHp, ClBinnedHp / ClTheoryBinnedHp - 1., 'g.')
-
-      ax.plot(ells_decoupled, cl_decoupled[0]/clTheory_decoupled[0] -1., 'bx')
+      ax.errorbar(ells_decoupled, cl_decoupled[0]/clTheory_decoupled[0] -1., yerr=np.sqrt(np.diag(cov))/clTheory_decoupled[0], c='b')
       ax.axhline(0., color='k')
       #
       ax.set_xlabel(r'$\ell$')

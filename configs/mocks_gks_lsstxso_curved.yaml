@@ -13,7 +13,7 @@ path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_g
 nrealiz: 100 #2
 probes: ['g', 'kcmb', 'shear']
 spins: [0, 0, 2]
-nside: 1024
+nside: 2048
 lmax: 9000 # should be a fraction of  
 
 path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
