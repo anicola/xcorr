@@ -16,14 +16,9 @@ pathOutputDir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gk
 #nside: 1024
 #lmax: 9000 # should be a fraction of  
 
-pathClTheory: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gs.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_ks.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_ss.txt']
-
 # If no noise wanted, comment out the line below
-pathNoiseClTheory: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt', 
-'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_ss.txt']
+#pathNoiseClTheory: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt', 
+#'/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_ss.txt']
 
 
 
@@ -31,17 +26,20 @@ pathNoiseClTheory: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_gg.txt',
 
 # Input needed to compute Cl
 mode: 'curved'
-lMinCl: 5
-lMaxCl: 3000
-nBinsCl: 20
+lMinCl: 5   # lowest edge of bandpower bins
+lMaxCl: 3000   # highest edge of bandpower bins
+nBinsCl: 20 # number of bandpower bins
 binSpacing: 'lin' # 'log'
 binWeighting: 'numModes'  # uniform
+lMaxMap: 5000  # maximum multipole to include in coupling matrix
 
 nameOutputClFile: 'test0'
 
 spins: [0, 0]
 pixWindow: [0, 0]
 pathMap1: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside1024_lmax9000_curved_rea0.fits'
-pathMask1: None
-pathMap2: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside1024_lmax9000_curved_rea1.fits'
-pathMask2: None
+pathMask1: 
+pathMap2: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside1024_lmax9000_curved_rea0.fits'
+pathMask2:
+pathClTheory: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt'
+
