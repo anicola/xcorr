@@ -59,7 +59,7 @@ def read_cl(config):
    fCl12 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
    
    # Cl_11
-   if config('pathCl11') is not None:
+   if config['pathCl11'] is not None:
       logger.info('Reading cl11 from '+config['pathCl11'])
       data = np.genfromtxt(config['pathCl11'])
       # check that the lmax requested is in the input file
@@ -72,7 +72,7 @@ def read_cl(config):
       fCl11 = fCl12
 
    # Cl_22
-   if config('pathCl11') is not None:
+   if config['pathCl11'] is not None:
       logger.info('Reading cl22 from '+config['pathCl22'])
       data = np.genfromtxt(config['pathCl22'])
       # check that the lmax requested is in the input file
