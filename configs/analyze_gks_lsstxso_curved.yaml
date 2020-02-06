@@ -33,14 +33,14 @@ binSpacing: 'lin' # 'log'
 binWeighting: 'numModes'  # uniform
 lMaxMap: 5000  # maximum multipole to include in coupling matrix
 
-nameOutputClFile: 'test0'
+nameOutputClFile: 'test0_gg' #'test0_masked_apod0'
 
 spins: [0, 0]
 pixWindow: [0, 0]
 pathMap1: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside2048_lmax9000_curved_rea0.fits'
-pathMask1: 
+pathMask1: #'/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
 pathMap2: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/g_nside2048_lmax9000_curved_rea0.fits'
-pathMask2:
+pathMask2: #'/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
 pathCl12: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt'
 pathCl11: # only needed if map1<>map2
 pathCl22: # only needed if map1<>map2

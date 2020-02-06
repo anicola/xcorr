@@ -105,6 +105,16 @@ if __name__ == '__main__':
       if config.has_key(key) and argDict[key] is not None:
          config[key] = argDict[key] 
 
+   # Check that output directory exists, create it if not
+   pathOutputDir = config['pathOutputDir']
+   if not os.path.isdir(pathOutputDir):
+      try:
+         os.makedirs(pathOutputDir)
+         logger.info('Created directory {}.'.format(pathOutputDir))
+      except:
+         logger.info('Directory {} already exists.'.format(pathOutputDir))
+         pass
+
 
    # Only curved (healpix) maps for now
    if config['mode'] <> 'curved':
@@ -132,6 +142,7 @@ if __name__ == '__main__':
          mask1 = np.ones_like(map1)
       else:
          mask1 = hp.read_map(config['pathMask1'])
+         mask1 = hp.ud_grade(mask1, nSide)
       logger.info('Read mask1 from {}.'.format(config['pathMask1']))
       
       
@@ -139,6 +150,7 @@ if __name__ == '__main__':
          mask2 = np.ones_like(map2)
       else:
          mask2 = hp.read_map(config['pathMask2'])
+         mask2 = hp.ud_grade(mask2, nSide)
       logger.info('Read mask2 from {}.'.format(config['pathMask2']))
 
 
@@ -201,6 +213,7 @@ if __name__ == '__main__':
          emaps1 = [map1]
          emaps2 = [map2]
 
+
       # Define fields
       f1 = nmt.NmtField(mask1, emaps1, purify_b=False, beam=pixWin1)
       f2 = nmt.NmtField(mask2, emaps2, purify_b=False, beam=pixWin2)
@@ -222,6 +235,11 @@ if __name__ == '__main__':
       cl_decoupled = wsp.decouple_cell(cl_coupled)
       # array of measured cl to be saved to file
       cl_out = np.vstack((ells_decoupled, cl_decoupled))
+      # Save measured cl to file
+      path = pathOutputDir + "/" + config['nameOutputClFile'] + "_measuredcl.txt"
+      np.savetxt(path, cl_out.T)
+      logger.info('Written measured cls to {}.'.format(path))
+
       
       # read the theory cl if requested
       if config['pathCl12']<>'None':
@@ -237,45 +255,33 @@ if __name__ == '__main__':
          # array of measured cl to be saved to file
          clTheory_out = np.vstack((ells_decoupled, clTheory_decoupled))
          # save it to file
+         path = pathOutputDir + "/" + config['nameOutputClFile'] + "_theorycl.txt"
+         np.savetxt(path, clTheory_out.T)
+         logger.info('Written theory cls to {}.'.format(path))
 
          # Theory Gaussian covariance
          logger.info('Theory cov')
          tStart = time()
          cw = nmt.NmtCovarianceWorkspace()
-         cw.compute_coupling_coefficients(wsp, wsp)
-         cl12 = fClTheory(np.arange(cw.wsp.lmax_a+1))
-         cl11 = fCl11(np.arange(cw.wsp.lmax_a+1))
-         cl22 = fCl22(np.arange(cw.wsp.lmax_a+1))
-         cov = nmt.gaussian_covariance(cw, cl11, cl12, cl12, cl22)
+         logger.info('Computing covariance workspace')
+         tStart = time()
+         cw.compute_coupling_coefficients(f1, f2, flb1=f1, flb2=f2)
          tStop = time()
-         logger.info('took '+str((tStop-tStart)/60.)+' min')
+         logger.info('cov took '+str((tStop-tStart)/60.)+' min')
+         cl12 = fClTheory(np.arange(cw.wsp.lmax+1))
+         cl11 = fCl11(np.arange(cw.wsp.lmax+1))
+         cl22 = fCl22(np.arange(cw.wsp.lmax+1))
+         # !!! Syntax valid for spin 0 fields only
+         cov = nmt.gaussian_covariance(cw, 
+                                       spin1, spin2, spin1, spin2,
+                                       [cl11], [cl12], [cl12], [cl22],
+                                       wa=wsp, wb=wsp)
+         # save it to file
+         path = pathOutputDir + "/" + config['nameOutputClFile'] + "_theorycov.txt"
+         np.savetxt(path, cov)
+         logger.info('Written theory cov to {}.'.format(path))
 
 
-   # Check that output directory exists, create it if not
-   pathOutputDir = config['pathOutputDir']
-   if not os.path.isdir(pathOutputDir):
-      try:
-         os.makedirs(pathOutputDir)
-         logger.info('Created directory {}.'.format(pathOutputDir))
-      except:
-         logger.info('Directory {} already exists.'.format(pathOutputDir))
-         pass
-
-   # Save measured cl to file
-   path = pathOutputDir + "/" + config['nameOutputClFile'] + "_measuredcl.txt"
-   np.savetxt(path, cl_out.T)
-   logger.info('Written measured cls to {}.'.format(path))
-
-   # Save the theory cl to file if requested
-   if config['pathCl12']<>'None':
-      path = pathOutputDir + "/" + config['nameOutputClFile'] + "_ theorycl.txt"
-      np.savetxt(path, clTheory_out.T)
-      logger.info('Written theory cls to {}.'.format(path))
-      
-      path = pathOutputDir + "/" + config['nameOutputClFile'] + "_ theorycov.txt"
-      np.savetxt(path, cov)
-      logger.info('Written theory cov to {}.'.format(path))
-      
 
    # plot to check
    if True:
@@ -308,6 +314,7 @@ if __name__ == '__main__':
       ax.errorbar(ells_decoupled, -cl_decoupled[0], yerr=np.sqrt(np.diag(cov)), c='r')
       ax.plot(ells_decoupled, clTheory_decoupled[0], '.', label=r'Theory, binned \& decoupled')
       ax.plot(ells, fClTheory(ells), label=r'Theory')
+      #ax.plot(ells, fClTheory(ells) / fpixwin(ells), label=r'Theory')
       #
       ax.set_yscale('log', nonposy='clip')
       ax.legend(loc=1)
@@ -319,8 +326,8 @@ if __name__ == '__main__':
       ax=fig.add_subplot(111)
       #
       #ax.plot(lCenBinnedHp, ClBinnedHp / ClTheoryBinnedHp - 1., 'g.')
-
       ax.errorbar(ells_decoupled, cl_decoupled[0]/clTheory_decoupled[0] -1., yerr=np.sqrt(np.diag(cov))/clTheory_decoupled[0], c='b')
+      #ax.errorbar(ells_decoupled, cl_decoupled[0]/clTheory_decoupled[0]*fpixwin(ells_decoupled) -1., yerr=np.sqrt(np.diag(cov))/clTheory_decoupled[0], c='b')
       ax.axhline(0., color='k')
       #
       ax.set_xlabel(r'$\ell$')
