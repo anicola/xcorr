@@ -41,13 +41,18 @@ pathMap1: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lss
 pathMask1: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
 pathMap2: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved/k_nside256_lmax9000_curved_rea0.fits'
 pathMask2: '/global/cscratch1/sd/sferraro/SOxpipe/masks/mask_LSST_SO_40pc_nside1024.fits'
+
+# Theory power spectra
+doTheory: True
+doCov: True
 pathCl12: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt'
 pathCl11: # only needed if map1<>map2
 pathCl22: # only needed if map1<>map2
-
 # Noise spectra should all be specified, unless they are zero
 pathNl11: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'
 pathNl22: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'
 pathNl12: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/ncl_kk.txt'
 
+# for quick tests
+plot: True
 

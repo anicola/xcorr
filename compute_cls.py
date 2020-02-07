@@ -39,6 +39,11 @@ parser.add_argument('--pathMask1', dest='pathMask1', type=str, required=False)
 parser.add_argument('--pathMap2', dest='pathMap2', type=str, required=False)
 parser.add_argument('--pathMask2', dest='pathMask2', type=str, required=False)
 parser.add_argument('--pathCl12', dest='pathCl12', type=str, required=False)
+parser.add_argument('--pathCl11', dest='pathCl11', type=str, required=False)
+parser.add_argument('--pathCl22', dest='pathCl22', type=str, required=False)
+parser.add_argument('--pathNl12', dest='pathNl12', type=str, required=False)
+parser.add_argument('--pathNl11', dest='pathNl11', type=str, required=False)
+parser.add_argument('--pathNl22', dest='pathNl22', type=str, required=False)
 
 
 ### END OF PARSER ###
@@ -64,17 +69,20 @@ def read_all_cl(config):
    #!!! Only implemented for scalar fields   
    
    # Read signal power spectra
-   fCl12 = read_cl(config['pathCl12'])
+   if config['pathCl12'] is not None:
+      fCl12 = read_cl(config['pathCl12'])
+   else:
+      fCl11 = lambda l: 0.
    #
    if config['pathCl11'] is not None:
       fCl11 = read_cl(config['pathCl11'])
    else:
-      fCl11 = fCl12
+      fCl11 = lambda l: 0.
    #
    if config['pathCl22'] is not None:
       fCl22 = read_cl(config['pathCl22'])
    else:
-      fCl22 = fCl12
+      fCl22 = lambda l: 0.
 
    # Read noise power spectra
    if config['pathNl12'] is not None:
@@ -98,6 +106,49 @@ def read_all_cl(config):
    f22 = lambda l: fCl22(l) + fNl22(l)
 
    return f12, f11, f22 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_wsp(f1, f2, mask1, mask2, b):
+   '''Computes the workspace with caching,
+   ie it saves the workspace and does not recompute it
+   if asked with the same masks.
+   Warning: it does not check that the bins are identical.
+   '''
+   # if first call ever, set up the cache dictionary
+   if not hasattr(get_wsp, "cache"):
+      get_wsp.cache = []
+
+   # check to see if this workspace was already computed   
+   for i in range(len(get_wsp.cache)):
+      if np.all(np.array(get_wsp.cache[i][:-1])==np.array([mask1, mask2])):
+         return get_wsp.cache[i][-1]
+
+   # if this calculation was not done before, do it
+   logger.info('Computing workspace element.')
+   tStart = time()
+   wsp = nmt.NmtWorkspace()
+   wsp.compute_coupling_matrix(f1, f2, b)
+   get_wsp.cache.append([mask1, mask2, wsp])
+   tStop = time()
+   logger.info('took '+str((tStop-tStart)/60.)+' min')
+   return wsp
+
+
 
 
 
@@ -133,17 +184,18 @@ if __name__ == '__main__':
    if config['mode'] <> 'curved':
       raise NotImplementedError()
 
-   if config['mode'] == 'curved':
+   elif config['mode'] == 'curved':
       import healpy as hp
 
       spin1, spin2 = config['spins']
       logger.info('Spins: spin1 = {}, spin2 = {}.'.format(spin1, spin2))
 
-      map1 = hp.read_map(config['pathMap1'], field=None)
       logger.info('Read map1 from {}.'.format(config['pathMap1']))
+      map1 = hp.read_map(config['pathMap1'], field=None)
       nSide1 = hp.pixelfunc.get_nside(map1)
-      map2 = hp.read_map(config['pathMap2'], field=None)
+
       logger.info('Read map2 from {}.'.format(config['pathMap2']))
+      map2 = hp.read_map(config['pathMap2'], field=None)
       nSide2 = hp.pixelfunc.get_nside(map2)
 
       if nSide1<>nSide2:
@@ -231,12 +283,8 @@ if __name__ == '__main__':
       f1 = nmt.NmtField(mask1, emaps1, purify_b=False, beam=pixWin1)
       f2 = nmt.NmtField(mask2, emaps2, purify_b=False, beam=pixWin2)
 
-      logger.info('Computing workspace element.')
-      tStart = time()
-      wsp = nmt.NmtWorkspace()
-      wsp.compute_coupling_matrix(f1, f2, b)
-      tStop = time()
-      logger.info('took '+str((tStop-tStart)/60.)+' min')
+      # initialize the workspace
+      wsp = get_wsp(f1, f2, mask1, mask2, b)
 
       # Compute pseudo-Cls
       logger.info('Computing (coupled) pseudo-cls')
@@ -255,7 +303,7 @@ if __name__ == '__main__':
 
       
       # read the theory cl if requested
-      if config['pathCl12']<>'None':
+      if config['doTheory']:
          # read the theory Cl
          fClTheory, fCl11, fCl22 = read_all_cl(config)
 
@@ -274,31 +322,32 @@ if __name__ == '__main__':
 
         
          # Theory Gaussian covariance
-         logger.info('Theory cov')
-         tStart = time()
-         cw = nmt.NmtCovarianceWorkspace()
-         logger.info('Computing covariance workspace')
-         tStart = time()
-         cw.compute_coupling_coefficients(f1, f2, flb1=f1, flb2=f2)
-         tStop = time()
-         logger.info('cov took '+str((tStop-tStart)/60.)+' min')
-         cl12 = fClTheory(np.arange(cw.wsp.lmax+1))
-         cl11 = fCl11(np.arange(cw.wsp.lmax+1))
-         cl22 = fCl22(np.arange(cw.wsp.lmax+1))
-         # !!! Syntax valid for spin 0 fields only
-         cov = nmt.gaussian_covariance(cw, 
-                                       spin1, spin2, spin1, spin2,
-                                       [cl11], [cl12], [cl12], [cl22],
-                                       wa=wsp, wb=wsp)
-         # save it to file
-         path = pathOutputDir + "/" + config['nameOutputClFile'] + "_theorycov.txt"
-         np.savetxt(path, cov)
-         logger.info('Written theory cov to {}.'.format(path))
-         
+         if config['doCov']:
+            logger.info('Theory cov')
+            tStart = time()
+            cw = nmt.NmtCovarianceWorkspace()
+            logger.info('Computing covariance workspace')
+            tStart = time()
+            cw.compute_coupling_coefficients(f1, f2, flb1=f1, flb2=f2)
+            tStop = time()
+            logger.info('cov took '+str((tStop-tStart)/60.)+' min')
+            cl12 = fClTheory(np.arange(cw.wsp.lmax+1))
+            cl11 = fCl11(np.arange(cw.wsp.lmax+1))
+            cl22 = fCl22(np.arange(cw.wsp.lmax+1))
+            # !!! Syntax valid for spin 0 fields only
+            cov = nmt.gaussian_covariance(cw, 
+                                          spin1, spin2, spin1, spin2,
+                                          [cl11], [cl12], [cl12], [cl22],
+                                          wa=wsp, wb=wsp)
+            # save it to file
+            path = pathOutputDir + "/" + config['nameOutputClFile'] + "_theorycov.txt"
+            np.savetxt(path, cov)
+            logger.info('Written theory cov to {}.'.format(path))
+            
 
 
-   # plot to check
-   if True:
+   # plot to check if requested
+   if config['plot']:# and config['doTheory'] and config['doCov']:
 
 
       fig=plt.figure(0)
