@@ -10,10 +10,10 @@
 # Input needed to generate sims and compute Cl
 mode: 'curved'
 path2outputdir: '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/sims_grf/mocks_gks_lsstxso_curved'
-nrealiz: 100 #2
-probes: ['g', 'kcmb', 'shear']
+nrealiz: 1 #100 #2
+probes: ['g', 'k', 's']
 spins: [0, 0, 2]
-nside: 2048
+nside: 256
 lmax: 9000 # should be a fraction of  
 
 path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 

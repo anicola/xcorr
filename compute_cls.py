@@ -45,47 +45,60 @@ parser.add_argument('--pathCl12', dest='pathCl12', type=str, required=False)
 
 
 
-def read_cl(config):
-   #!!! Only implemented for scalar fields   
-   
-   # Cl_12
-   logger.info('Reading cl12 from '+config['pathCl12'])
-   data = np.genfromtxt(config['pathCl12'])
+
+def read_cl(path):
+   logger.info('Reading cl from '+path)
+   data = np.genfromtxt(path)
    # check that the lmax requested is in the input file
    if data[-1,0]<config['lMaxCl']:
       raise ValueError('The lmax required is higher than in the cl input file')
    # interpolate the input cl, in case it was not given at each ell, 
    # or did not start at ell=0.
-   fCl12 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+   fCl = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+   return fCl
+
+
+
+
+def read_all_cl(config):
+   #!!! Only implemented for scalar fields   
    
-   # Cl_11
+   # Read signal power spectra
+   fCl12 = read_cl(config['pathCl12'])
+   #
    if config['pathCl11'] is not None:
-      logger.info('Reading cl11 from '+config['pathCl11'])
-      data = np.genfromtxt(config['pathCl11'])
-      # check that the lmax requested is in the input file
-      if data[-1,0]<config['lMaxCl']:
-         raise ValueError('The lmax required is higher than in the cl input file')
-      # interpolate the input cl, in case it was not given at each ell, 
-      # or did not start at ell=0.
-      fCl11 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+      fCl11 = read_cl(config['pathCl11'])
    else:
       fCl11 = fCl12
-
-   # Cl_22
-   if config['pathCl11'] is not None:
-      logger.info('Reading cl22 from '+config['pathCl22'])
-      data = np.genfromtxt(config['pathCl22'])
-      # check that the lmax requested is in the input file
-      if data[-1,0]<config['lMaxCl']:
-         raise ValueError('The lmax required is higher than in the cl input file')
-      # interpolate the input cl, in case it was not given at each ell, 
-      # or did not start at ell=0.
-      fCl22 = interp1d(data[:,0], data[:, 1], kind='linear', bounds_error=False, fill_value=0.)
+   #
+   if config['pathCl22'] is not None:
+      fCl22 = read_cl(config['pathCl22'])
    else:
       fCl22 = fCl12
-   
-   return fCl12, fCl11, fCl22
-   
+
+   # Read noise power spectra
+   if config['pathNl12'] is not None:
+      fNl12 = read_cl(config['pathNl12'])
+   else:
+      fNl12 = lambda l: 0.
+   #
+   if config['pathNl11'] is not None:
+      fNl11 = read_cl(config['pathNl11'])
+   else:
+      fNl11 = lambda l: 0.
+   #
+   if config['pathNl22'] is not None:
+      fNl22 = read_cl(config['pathNl22'])
+   else:
+      fnl22 = lambda l: 0.
+
+   # add signal and noise
+   f12 = lambda l: fCl12(l) + fNl12(l)
+   f11 = lambda l: fCl11(l) + fNl11(l)
+   f22 = lambda l: fCl22(l) + fNl22(l)
+
+   return f12, f11, f22 
+
 
 
 
@@ -244,7 +257,7 @@ if __name__ == '__main__':
       # read the theory cl if requested
       if config['pathCl12']<>'None':
          # read the theory Cl
-         fClTheory, fCl11, fCl22 = read_cl(config)
+         fClTheory, fCl11, fCl22 = read_all_cl(config)
 
          
          # couple, bin and decouple the theory
@@ -259,6 +272,7 @@ if __name__ == '__main__':
          np.savetxt(path, clTheory_out.T)
          logger.info('Written theory cls to {}.'.format(path))
 
+        
          # Theory Gaussian covariance
          logger.info('Theory cov')
          tStart = time()
@@ -280,58 +294,36 @@ if __name__ == '__main__':
          path = pathOutputDir + "/" + config['nameOutputClFile'] + "_theorycov.txt"
          np.savetxt(path, cov)
          logger.info('Written theory cov to {}.'.format(path))
-
+         
 
 
    # plot to check
    if True:
 
 
-#      nSide = 1024
-#
-#      cl = fClTheory(np.arange(3.*nSide))
-#      map1 = hp.synfast(cl, nSide)
-#      map2 = map1
-#
-#      map1alm = hp.map2alm(map1)
-#      map1 = hp.alm2map(map1alm, nSide)
-#      map2 = map1
-#
-#      # Quick anafast
-#      clHp = hp.anafast(map1, map2)
-#      ellHp = np.arange(len(clHp))
-#      clTheoryHp = fClTheory(ellHp)
-#      lCenBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, ellHp, statistic='mean', bins=20)
-#      ClBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, clHp, statistic='mean', bins=20)
-#      ClTheoryBinnedHp, lEdges, binIndices = stats.binned_statistic(ellHp, clTheoryHp, statistic='mean', bins=20)
-#      
-#
-
       fig=plt.figure(0)
       ax=fig.add_subplot(111)
       #
-      ax.errorbar(ells_decoupled, cl_decoupled[0], yerr=np.sqrt(np.diag(cov)), c='b', label=r'Measured, decoupled')
+
+      ax.errorbar(ells_decoupled, cl_decoupled[0], yerr=np.sqrt(np.diag(cov)), c='b', label=r'measured, decoupled')
       ax.errorbar(ells_decoupled, -cl_decoupled[0], yerr=np.sqrt(np.diag(cov)), c='r')
-      ax.plot(ells_decoupled, clTheory_decoupled[0], '.', label=r'Theory, binned \& decoupled')
-      ax.plot(ells, fClTheory(ells), label=r'Theory')
-      #ax.plot(ells, fClTheory(ells) / fpixwin(ells), label=r'Theory')
+      ax.plot(ells_decoupled, clTheory_decoupled[0], '.', label=r'theory, binned & decoupled')
+      ax.plot(ells, fClTheory(ells), label=r'theory')
       #
       ax.set_yscale('log', nonposy='clip')
       ax.legend(loc=1)
       ax.set_xlabel(r'$\ell$')
-      ax.set_ylabel(r'$C_\ell$')
+      ax.set_ylabel(r'$c_\ell$')
 
 
       fig=plt.figure(1)
       ax=fig.add_subplot(111)
       #
-      #ax.plot(lCenBinnedHp, ClBinnedHp / ClTheoryBinnedHp - 1., 'g.')
       ax.errorbar(ells_decoupled, cl_decoupled[0]/clTheory_decoupled[0] -1., yerr=np.sqrt(np.diag(cov))/clTheory_decoupled[0], c='b')
-      #ax.errorbar(ells_decoupled, cl_decoupled[0]/clTheory_decoupled[0]*fpixwin(ells_decoupled) -1., yerr=np.sqrt(np.diag(cov))/clTheory_decoupled[0], c='b')
       ax.axhline(0., color='k')
       #
       ax.set_xlabel(r'$\ell$')
-      #ax.set_ylabel(r'$C_\ell^\text{measured} / C_\ell^\text{th binned} - 1$')
+      #ax.set_ylabel(r'$c_\ell^\text{measured} / c_\ell^\text{th binned} - 1$')
 
 
 

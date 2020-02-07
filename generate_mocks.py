@@ -13,6 +13,7 @@ import copy
 import pymaster as nmt
 from scipy.interpolate import interp1d
 import sharedmem
+import matplotlib.pyplot as plt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -170,7 +171,7 @@ def read_cl(params):
          fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
          noisecls_temp = fcl(np.arange(params['nell']))
       else:
-         noisecls_temp = np.zeros_like(cls_temp)
+         noisecls_temp = np.zeros(params['nell'])
 
       for iProbe2, probe2 in enumerate(params['probes'][iProbe1:], start=iProbe1):
          logger.info('Reading cls for probe1 = {} and probe2 = {}.'.format(probe1, probe2))
@@ -185,6 +186,7 @@ def read_cl(params):
          # or did not start at ell=0.
          fcl = interp1d(data[:params['nell'],0], data[:params['nell'], 1], kind='linear', bounds_error=False, fill_value=0.)
          cls_temp = fcl(np.arange(params['nell']))
+
          # Move to the next pair of probes in the input cls
          iProbePair += 1
 
@@ -222,6 +224,8 @@ def read_cl(params):
       for jField in range(iField, params['nFields']):
          cls[iFieldPair,:] = clFieldsMat[iField, jField, :]
          iFieldPair += 1
+
+   print(cls)
 
 
    return cls
@@ -284,6 +288,7 @@ def generate_map(params, cls, iRea):
    # Generate the GRF maps
    maps = nmt.synfast_spherical(params['nside'], cls, spin_arr=params['spins'], seed=iRea, \
          beam=None)
+
 
 #   if params['nspin2'] > 0:
 #      raise NotImplementedError()

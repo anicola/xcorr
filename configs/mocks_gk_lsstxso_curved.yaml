@@ -12,7 +12,7 @@ probes: ['g', 'kcmb']
 spins: [0, 0]
 path2cls: ['/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gg.txt', '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_gk.txt', 
 '/global/cscratch1/sd/sferraro/SOxpipe/input_cl/cl_kk.txt']
-nside: 1024
+nside: 2048
 #pixwindow: [1, 0]
 #nell_theor: 3501
 lmax: 9000 # should be a fraction of  
