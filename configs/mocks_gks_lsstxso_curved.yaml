@@ -34,7 +34,7 @@ lMinCl: 10   # lowest edge of bandpower bins
 lMaxCl: 700 #3000 #3000   # highest edge of bandpower bins
 nBinsCl: 20 # number of bandpower bins
 binSpacing: 'lin' # 'log'
-binWeighting: 'numModes'  # uniform
+binWeighting: 'numModes'  # 'uniform'
 lMaxMap: 700 #6000  # maximum multipole to include in coupling matrix
 
 doTheory: False
